@@ -52,7 +52,7 @@ const Navbar = () => {
 
       {/* hamburger menu */}
       <div onClick={handleclick} className="md:hidden  absolute right-10 z-10">
-        {!nav ? <FaBars /> : <FaTimes />}
+        {!nav ? <FaBars size={25} /> : <FaTimes size={25} />}
       </div>
       {/* mb menu */}
       <div
