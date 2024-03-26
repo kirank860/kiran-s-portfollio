@@ -4,8 +4,9 @@ import {
   FaTimes,
   FaGithub,
   FaLinkedin,
-  FaFacebook,
+
 } from "react-icons/fa";
+import { FaWhatsapp } from 'react-icons/fa';
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { HiOutlineMail } from "react-icons/hi";
 import logo from "../assets/logo1.png";
@@ -14,6 +15,7 @@ const Navbar = () => {
   const [nav, setnav] = useState(false);
 
   const handleclick = () => setnav(!nav);
+
 
   return (
     <div className="fixed w-full h-[80px] flex justify-between items-center px-4 bg-[#0a192f] text-gray-300">
@@ -79,6 +81,7 @@ const Navbar = () => {
           </Link></li>
       </div>
       {/* ss icons */}
+      
       <div className="hidden lg:flex flex-col fixed top-[35%] left-0">
         <ul>
           <li className="w-[150px] h-[60px] flex justify-between items-center ml-[-100px] hover:ml-[-10px] duration-300 bg-blue-600">
@@ -114,8 +117,16 @@ const Navbar = () => {
             </a>
           </li>
         </ul>
+      
       </div>
-    </div>
+      <div className="absolute top-[550px] right-[0]">
+    <a href="https://wa.me/8606414991">
+        <FaWhatsapp size={30} />
+    </a>
+</div>
+
+      
+    </div>  
   );
 };
 
