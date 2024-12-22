@@ -80,7 +80,7 @@ const Work = () => {
                     Demo
                   </button>
                 </a>
-                <a href="/">
+                <a href="https://github.com/Aljamia/al-jamia-web">
                   <button className="text-center py-3 px-4 m-2 rounded-lg bg-white text-gary-700 font-bold text-lg">
                     Code
                   </button>
