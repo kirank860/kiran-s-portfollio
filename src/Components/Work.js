@@ -6,6 +6,7 @@ import aljamia from "../assets/projects/aljamia.png";
 import ecommerce from "../assets/projects/ecomerce.png";
 import deconqustia from "../assets/projects/deconqustia.png";
 import fooda_app from "../assets/projects/food-app.png"
+import datahex from "../assets/projects/datahex.png"
 const Work = () => {
   return (
     <div name="works" className="w-full md:h-screen text-gray-300 bg-[#0a192f]">
@@ -122,6 +123,29 @@ const Work = () => {
               </span>
               <div className="pt-8 text-center">
                 <a href="https://deconquista.siokerala.org/">
+                  <button className="text-center py-3 px-4 m-2 rounded-lg bg-white text-gary-700 font-bold text-lg">
+                    Demo
+                  </button>
+                </a>
+                <a href="/">
+                  <button className="text-center py-3 px-4 m-2 rounded-lg bg-white text-gary-700 font-bold text-lg">
+                    Code
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{ backgroundImage: `url(${datahex})` }}
+            className="shadow-lg shadow-[#040c16] group container rounded-md flex justify-center items-center mx-auto content-div"
+          >
+            {/* hover effect */}
+            <div className="opacity-0  group-hover:opacity-100">
+              <span className="text-2xl font-bold text-white tracking-wider">
+                React js Application
+              </span>
+              <div className="pt-8 text-center">
+                <a href="https://datahex.co/">
                   <button className="text-center py-3 px-4 m-2 rounded-lg bg-white text-gary-700 font-bold text-lg">
                     Demo
                   </button>
