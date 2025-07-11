@@ -5,15 +5,11 @@ import Home from './Components/Home'
 import Skills from './Components/Skills'
 import Work from './Components/Work'
 import Contact from './Components/Contact'
+import ModernPortfolio from './Components/ModernPortfolio'
 const App = () => {
   return (
     <div>
-      <Navbar/>
-      <Home/>
-    <About/>
-    <Skills/>
-    <Work/>
-    <Contact/>
+     <ModernPortfolio/>
     </div>
   )
 }
