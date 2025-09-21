@@ -113,15 +113,15 @@ const ModernPortfolio = () => {
       image: '🎓',
       featured: true
     },
-    // {
-    //   title: 'E-Commerce Store',
-    //   description: 'Full-stack e-commerce solution with advanced filtering, payment gateway, and inventory management.',
-    //   tech: ['React', 'Redux', 'Node.js', 'Stripe'],
-    //   demo: 'https://e-commerce-fzw8z1a8z-kirank860.vercel.app/',
-    //   code: '#',
-    //   gradient: 'from-orange-500 via-red-500 to-pink-500',
-    //   image: '🛒'
-    // },
+    {
+      title: 'E-Commerce Store',
+      description: 'Full-stack e-commerce solution with advanced filtering, payment gateway, and inventory management.',
+      tech: ['React', 'Redux', 'Node.js', 'Stripe'],
+      demo: 'https://e-commerce-fzw8z1a8z-kirank860.vercel.app/',
+      code: '#',
+      gradient: 'from-orange-500 via-red-500 to-pink-500',
+      image: '🛒'
+    },
     {
       title: 'DeConquista Interactive',
       description: 'High-performance React application with complex state management and real-time features.',
