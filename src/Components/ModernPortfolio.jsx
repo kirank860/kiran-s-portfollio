@@ -62,6 +62,28 @@ const ModernPortfolio = () => {
 
   const projects = [
     {
+      title: 'Ocean Island Inn',
+      description: 'Ocean Island Inn is a modern hotel and resort booking web application that highlights room details, guest discounts, extended stay options, and local travel guides. Built with React and Astro, it provides a clean, responsive UI with an easy booking experience and vibrant branding.',
+      tech: ['React.js', 'Astro', 'Tailwind CSS'],
+      demo: 'https://oceanisland-web.netlify.app/',
+      code: 'https://github.com/ocean-island/oceanisland-web',
+      gradient: 'from-[#FF2C92] via-[#4BC6F4] to-[#9CD82B]', // pink → ocean blue → lime green
+      image: '🏨',
+      featured: true
+    },
+    
+    {
+      title: 'Novintus',
+      description: 'Novintus is a modern educational web application for Educare, designed to provide personalized one-to-one tutoring. The platform highlights features like skill development, growth mindset, passionate teaching, and enables parents/students to book demo classes seamlessly.',
+      tech: ['React.js', 'Tailwind CSS'],
+      demo: 'https://noviindus.vercel.app/',
+      code: 'https://github.com/kirank860/Noviindus',
+      gradient: 'from-[#7B1E3A] via-[#C94F5C] to-[#F8E1D4]', // burgundy → warm pink → cream
+      image: '📚',
+      featured: true
+    },
+    
+    {
       title: 'Food Delivery Platform',
       description: 'Enterprise-level food delivery application with real-time tracking, payment integration, and advanced analytics dashboard.',
       tech: ['EJS', 'Node.js', 'MongoDB', 'Socket.io'],
@@ -315,9 +337,9 @@ const ModernPortfolio = () => {
               </div>
               
               <p className="text-lg text-gray-300 leading-relaxed">
-                With over 5 years of experience in full-stack development, I specialize in creating 
+                With over 2 years of experience in full-stack development, I specialize in creating 
                 high-performance web applications that combine beautiful design with robust functionality. 
-                My expertise spans across modern React ecosystems, Node.js backends, and cloud technologies.
+                My expertise spans across modern React ecosystems, Node.js backends
               </p>
               
               <p className="text-lg text-gray-300 leading-relaxed">
@@ -327,17 +349,22 @@ const ModernPortfolio = () => {
               </p>
               
               <div className="flex items-center space-x-4 pt-4">
-                <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
-                  <FaDownload />
-                  <span>Download CV</span>
-                </button>
-                <div className="flex space-x-2">
-                  {[1,2,3,4,5].map((star) => (
-                    <FaStar key={star} className="text-yellow-400" />
-                  ))}
-                  <span className="text-gray-400 ml-2">5.0 Rating</span>
-                </div>
-              </div>
+  <a
+    href="/Kiran-MERN-Resume.pdf"
+    download="Kiran-MERN-Resume.pdf"
+    className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
+  >
+    <FaDownload />
+    <span>Download CV</span>
+  </a>
+  <div className="flex space-x-2">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <FaStar key={star} className="text-yellow-400" />
+    ))}
+    <span className="text-gray-400 ml-2">5.0 Rating</span>
+  </div>
+</div>
+
             </div>
             
             <div className="grid grid-cols-2 gap-6">
