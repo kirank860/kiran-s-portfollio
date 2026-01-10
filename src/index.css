@@ -1,29 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-@layer base {
-    body{
-@apply font-[Raleway];
-    }
-    li{
-        @apply px-4;
-        @apply cursor-pointer;
-        @apply list-none;
-        @apply hover:text-pink-600;
-    }
+:root {
+  --background: #09090b;
+  --foreground: #fafafa;
 }
-.content-div{
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    height: 250px;
 
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
 }
-.content-div:hover{
-    background-image: linear-gradient(
-        to right,rgba(112,157,255,0.8),
-        hsla(242,74%,61%,0.8)
-    )!important;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-darker {
+    @apply bg-black/40 backdrop-blur-xl border border-white/5;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-white via-primary-200 to-white bg-clip-text text-transparent;
+  }
+
+  .text-gradient-vibrant {
+    @apply bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply relative overflow-hidden px-8 py-4 bg-primary-600 rounded-full font-semibold text-white transition-all duration-300 active:scale-95;
+
+    &:hover {
+      @apply bg-primary-500;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+  }
+
+  .section-padding {
+    @apply py-16 md:py-32 px-4 md:px-12 lg:px-24;
+  }
+}
+
+.bg-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
