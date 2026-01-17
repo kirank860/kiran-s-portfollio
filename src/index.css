@@ -91,11 +91,11 @@ h6 {
 
   .btn-primary {
     @apply relative overflow-hidden px-8 py-4 bg-primary-600 rounded-full font-semibold text-white transition-all duration-300 active:scale-95;
+  }
 
-    &:hover {
-      @apply bg-primary-500;
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-    }
+  .btn-primary:hover {
+    @apply bg-primary-500;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
   }
 
   .section-padding {

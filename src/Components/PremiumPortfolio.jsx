@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import {
     Github,
     Linkedin,
     Mail,
     ExternalLink,
-    Code2,
-    Rocket,
-    Palette,
     Cpu,
     Globe,
     MessageSquare,
@@ -15,10 +12,6 @@ import {
     ArrowRight,
     Menu,
     X,
-    ChevronRight,
-    Star,
-    Zap,
-    Layout,
     Layers
 } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -63,17 +56,9 @@ const Magnetic = ({ children }) => {
 const PremiumPortfolio = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
     const containerRef = useRef(null);
 
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
 
     useEffect(() => {
         const moveCursor = (e) => {
@@ -737,8 +722,8 @@ const PremiumPortfolio = () => {
                         </div>
                         <p className="text-zinc-500 text-sm">© 2024 Built with passion by Kiran K.</p>
                         <div className="flex gap-6">
-                            <a href="#" className="text-zinc-500 hover:text-zinc-100 transition-colors">Privacy</a>
-                            <a href="#" className="text-zinc-500 hover:text-zinc-100 transition-colors">Terms</a>
+                            <a href="#contact" className="text-zinc-500 hover:text-zinc-100 transition-colors">Privacy</a>
+                            <a href="#contact" className="text-zinc-500 hover:text-zinc-100 transition-colors">Terms</a>
                         </div>
                     </div>
                 </footer>
