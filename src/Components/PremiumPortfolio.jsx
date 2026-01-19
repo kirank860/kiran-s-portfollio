@@ -393,10 +393,7 @@ const PremiumPortfolio = () => {
                                     <div className="text-3xl font-bold text-white">10+</div>
                                     <div className="text-sm text-zinc-500 uppercase tracking-widest font-semibold">Projects</div>
                                 </div>
-                                <div>
-                                    <div className="text-3xl font-bold text-white">SVG</div>
-                                    <div className="text-sm text-zinc-500 uppercase tracking-widest font-semibold">Creative</div>
-                                </div>
+
                             </div>
                         </motion.div>
 
