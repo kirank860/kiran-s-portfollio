@@ -79,6 +79,14 @@ const PremiumPortfolio = () => {
 
     const projects = [
         {
+            title: 'Richard Mille Showcase',
+            description: 'A high-end luxury interactive experience showcasing the RM 50-03 McLaren Tourbillon watch with custom scroll mechanics and canvas rendering.',
+            tech: ['Next.js', 'Tailwind', 'Canvas', 'Framer Motion'],
+            link: 'https://richardmille-lime.vercel.app/',
+            github: 'https://github.com/kirank860/richard-mille',
+            image: '/richard_mille.png',
+        },
+        {
             title: 'Ocean Island Inn',
             description: 'A high-end resort booking platform with immersive UI/UX.',
             tech: ['React', 'Astro', 'Tailwind'],
