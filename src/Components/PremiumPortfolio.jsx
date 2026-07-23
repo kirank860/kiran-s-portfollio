@@ -60,23 +60,42 @@ const Preloader = ({ onComplete }) => {
    SPLIT TEXT ANIMATION
    ═══════════════════════════════════════════ */
 const SplitText = ({ text, className = '', delay = 0 }) => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: '-50px' });
-
     return (
-        <span ref={ref} className={className} aria-label={text}>
+        <motion.span 
+            initial="initial"
+            animate="animate"
+            whileHover="hovered"
+            className={`${className} inline-flex overflow-hidden`} 
+            aria-label={text}
+        >
             {text.split('').map((char, i) => (
-                <span key={i} className="split-char">
-                    <span
-                        className={`split-char-inner ${isInView ? 'revealed' : ''}`}
-                        style={{ animationDelay: `${delay + i * 0.04}s` }}
-                        aria-hidden="true"
-                    >
-                        {char === ' ' ? '\u00A0' : char}
-                    </span>
-                </span>
+                <motion.span
+                    key={i}
+                    variants={{
+                        initial: { y: "100%", opacity: 0, rotate: 8 },
+                        animate: { y: 0, opacity: 1, rotate: 0 },
+                        hovered: { 
+                            y: [0, -15, 0], 
+                            color: ["currentColor", "#a855f7", "currentColor"],
+                            transition: {
+                                duration: 0.5,
+                                delay: i * 0.05,
+                                ease: "easeInOut"
+                            }
+                        }
+                    }}
+                    transition={{
+                        duration: 0.8,
+                        ease: [0.16, 1, 0.3, 1],
+                        delay: delay + i * 0.04
+                    }}
+                    className="inline-block origin-bottom"
+                    aria-hidden="true"
+                >
+                    {char === ' ' ? '\u00A0' : char}
+                </motion.span>
             ))}
-        </span>
+        </motion.span>
     );
 };
 
@@ -342,7 +361,7 @@ const PremiumPortfolio = () => {
             title: 'Ocean Island Inn',
             description: 'A high-end resort booking platform with immersive UI/UX.',
             tech: ['React', 'Astro', 'Tailwind'],
-            link: 'https://oceanisland-web.netlify.app/',
+            link: 'https://www.oceanisland.com/',
             github: 'https://github.com/ocean-island/oceanisland-web',
             image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
             color: '#0ea5e9',
@@ -404,15 +423,7 @@ const PremiumPortfolio = () => {
             link: 'https://deconquista.siokerala.org/',
             image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800',
         },
-        {
-            company: 'Personal Enterprise',
-            title: 'E-Commerce Storefront',
-            description: 'Full-scale interface with cart, wishlist, and product filtering; optimized for high performance.',
-            impact: 'LocalStorage Persistence',
-            tech: ['React.js', 'Context API', 'State'],
-            link: 'https://e-commerce-2-kiran.vercel.app/',
-            image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-        }
+   
     ];
 
     const featuredProjects = [
@@ -612,20 +623,43 @@ const PremiumPortfolio = () => {
             <main className="relative z-10">
 
                 {/* ── HERO SECTION ── */}
-                <section id="home" className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative">
+                <section id="home" className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
+                    {/* 3D Parallax Backgrounds */}
+                    <motion.div
+                        className="absolute inset-0 z-0"
+                        style={{
+                            y: useTransform(scrollYProgress, [0, 1], ['0%', '40%']),
+                            opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
+                            scale: useTransform(scrollYProgress, [0, 1], [1, 1.1])
+                        }}
+                    >
+                        <img src="/hero-bg-frontend.png" alt="3D Background" className="w-full h-full object-cover opacity-50 mix-blend-screen" />
+                    </motion.div>
+
+                    <motion.div
+                        className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
+                        style={{
+                            y: useTransform(scrollYProgress, [0, 1], ['0%', '70%']),
+                            rotate: useTransform(scrollYProgress, [0, 1], [0, 15]),
+                            scale: useTransform(scrollYProgress, [0, 1], [1, 1.2])
+                        }}
+                    >
+                        <img src="/hero-object-frontend.png" alt="3D Object" className="w-[80vw] md:w-[600px] object-contain opacity-70 mix-blend-screen animate-float" />
+                    </motion.div>
+
                     {isLoaded && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5 }}
-                            className="w-full max-w-6xl mx-auto"
+                            className="w-full max-w-6xl mx-auto relative z-10 p-8 md:p-16 glass-strong rounded-[3rem]"
                         >
                             {/* Status Badge */}
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2, duration: 0.8 }}
-                                className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass text-sm font-medium text-primary-400 mb-10"
+                                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full glass border border-white/10 text-sm font-medium text-primary-300 mb-10 shadow-[0_0_30px_rgba(139,92,246,0.2)]"
                             >
                                 <span className="relative flex h-2 w-2">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
@@ -635,9 +669,27 @@ const PremiumPortfolio = () => {
                             </motion.div>
 
                             {/* Split Text Name */}
-                            <h1 className="text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] font-black tracking-tighter leading-[0.85] mb-4 font-display">
-                                <SplitText text="KIRAN K." className="text-gradient block" delay={0.3} />
-                            </h1>
+                            <div className="relative group inline-block cursor-help mb-4">
+                                <h1 className="text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] font-black tracking-tighter leading-[0.85] font-display transition-transform duration-300 group-hover:scale-105" style={{ textShadow: '0 0 80px rgba(139, 92, 246, 0.4)' }}>
+                                    <SplitText text="KIRAN K." className="text-gradient block" delay={0.3} />
+                                </h1>
+                                
+                                {/* Hover Card */}
+                                <div className="absolute top-[80%] left-1/2 -translate-x-1/2 mt-4 w-72 p-5 rounded-2xl bg-zinc-900/90 backdrop-blur-xl border border-white/10 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-50 shadow-[0_0_40px_rgba(139,92,246,0.3)] flex flex-col items-center text-center">
+                                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary-600 to-purple-400 mb-3 p-[2px]">
+                                        <div className="w-full h-full rounded-full bg-zinc-900 flex items-center justify-center overflow-hidden">
+                                            <span className="text-2xl">👨‍💻</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-lg font-bold text-white mb-1">Kiran K.</h3>
+                                    <p className="text-xs text-zinc-400 mb-3 leading-relaxed">MERN Stack Developer passionate about crafting beautiful & high-performance web experiences.</p>
+                                    <div className="flex flex-wrap gap-2 w-full justify-center">
+                                        <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-primary-300 tracking-wider uppercase font-medium">React</span>
+                                        <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-primary-300 tracking-wider uppercase font-medium">Node.js</span>
+                                        <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-primary-300 tracking-wider uppercase font-medium">MongoDB</span>
+                                    </div>
+                                </div>
+                            </div>
 
                             {/* Role subtitle with stagger */}
                             <motion.div
@@ -645,7 +697,7 @@ const PremiumPortfolio = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.8, duration: 0.8 }}
                             >
-                                <p className="text-xl md:text-2xl font-light text-zinc-500 tracking-widest uppercase mb-4">
+                                <p className="text-xl md:text-2xl font-light text-zinc-400 tracking-[0.3em] uppercase mb-6">
                                     Full Stack Developer
                                 </p>
                             </motion.div>
@@ -654,10 +706,10 @@ const PremiumPortfolio = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 1, duration: 0.8 }}
-                                className="max-w-xl mx-auto text-base md:text-lg text-zinc-500 leading-relaxed mb-12"
+                                className="max-w-2xl mx-auto text-base md:text-xl text-zinc-400 leading-relaxed mb-12"
                             >
                                 Transforming complex problems into elegant digital solutions with
-                                <span className="text-zinc-200 font-medium"> 2+ years of experience </span>
+                                <span className="text-zinc-100 font-medium"> 2+ years of experience </span>
                                 building high-performance web systems.
                             </motion.p>
 
@@ -671,26 +723,26 @@ const PremiumPortfolio = () => {
                                 <Magnetic>
                                     <button
                                         onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                                        className="btn-primary group flex items-center gap-2"
+                                        className="btn-primary group flex items-center gap-3 px-8 py-4 text-lg"
                                     >
                                         View Projects
-                                        <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                                        <ArrowRight size={20} className="transition-transform group-hover:translate-x-2" />
                                     </button>
                                 </Magnetic>
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-4">
                                     <Magnetic>
-                                        <a href="https://github.com/kirank860" target="_blank" rel="noreferrer" className="p-3.5 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/30">
-                                            <Github size={20} />
+                                        <a href="https://github.com/kirank860" target="_blank" rel="noreferrer" className="p-4 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/50 hover:text-white">
+                                            <Github size={22} />
                                         </a>
                                     </Magnetic>
                                     <Magnetic>
-                                        <a href="https://www.linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="p-3.5 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/30">
-                                            <Linkedin size={20} />
+                                        <a href="https://www.linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="p-4 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/50 hover:text-white">
+                                            <Linkedin size={22} />
                                         </a>
                                     </Magnetic>
                                     <Magnetic>
-                                        <a href="mailto:kirankrishnan889@gmail.com" className="p-3.5 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/30">
-                                            <Mail size={20} />
+                                        <a href="mailto:kirankrishnan889@gmail.com" className="p-4 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/50 hover:text-white">
+                                            <Mail size={22} />
                                         </a>
                                     </Magnetic>
                                 </div>
@@ -703,10 +755,12 @@ const PremiumPortfolio = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 2, duration: 1 }}
-                        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+                        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10 mix-blend-difference"
                     >
-                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-600 font-medium">Scroll</span>
-                        <div className="scroll-indicator" />
+                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-medium">Scroll</span>
+                        <div className="scroll-indicator border border-white/20">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce mx-auto mt-1 opacity-50" />
+                        </div>
                     </motion.div>
                 </section>
 
@@ -933,7 +987,7 @@ const PremiumPortfolio = () => {
                 </section>
 
                 {/* ── SELECTED WORKS (Horizontal Scroll) ── */}
-                <section id="projects" ref={projectsRef} className="relative" style={{ height: '400vh' }}>
+                <section id="projects" ref={projectsRef} className="relative" style={{ height: '250vh' }}>
                     <div className="sticky top-0 h-screen overflow-hidden">
                         <div className="h-full flex flex-col justify-center px-4 md:px-12 lg:px-24">
                             {/* Section Header */}
@@ -996,7 +1050,7 @@ const PremiumPortfolio = () => {
                 </section>
 
                 {/* ── FEATURED PROJECTS GRID ── */}
-                <section className="section-padding">
+                <section className="px-4 md:px-12 lg:px-24 pb-20 md:pb-36 pt-10 md:pt-20">
                     <div className="max-w-7xl mx-auto">
                         <motion.div
                             initial={{ opacity: 0, y: 40 }}
