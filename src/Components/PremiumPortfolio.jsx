@@ -12,7 +12,7 @@ import {
     ArrowRight,
     Menu,
     X,
-    Layers,
+    Layers
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -339,15 +339,28 @@ const PremiumPortfolio = () => {
     const timelineHeight = useTransform(timelineProgress, [0, 1], ['0%', '100%']);
 
     // Horizontal scroll for projects
-    const { scrollYProgress: projectsScrollProgress } = useScroll({
-        target: projectsRef,
-        offset: ['start start', 'end end']
-    });
-    const projectsX = useTransform(projectsScrollProgress, [0, 1], ['0%', '-60%']);
 
     const sections = ['home', 'about', 'skills', 'projects', 'contact'];
 
     const projects = [
+        {
+            title: 'TRUXO - Equipment Rental',
+            description: 'Developed a heavy equipment rental web platform with real-time inventory management, admin dashboard, and booking system.',
+            tech: ['Next.js 16', 'Tailwind CSS', 'Supabase'],
+            link: 'https://truxo.ae',
+            github: 'https://github.com/kirank860/truxo',
+            image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=800',
+            color: '#f59e0b',
+        },
+        {
+            title: 'Aljamia Al Islamiya',
+            description: 'Built a full-stack educational portal using the MERN stack. Designed responsive UI for campus facilities and configured scalable storage for institutional records.',
+            tech: ['Next.js', 'Node.js', 'MongoDB'],
+            link: 'https://www.aljamia.net/',
+            github: '#',
+            image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800',
+            color: '#0ea5e9',
+        },
         {
             title: 'Richard Mille Showcase',
             description: 'A high-end luxury interactive experience showcasing the RM 50-03 McLaren Tourbillon watch with custom scroll mechanics and canvas rendering.',
@@ -359,8 +372,8 @@ const PremiumPortfolio = () => {
         },
         {
             title: 'Ocean Island Inn',
-            description: 'A high-end resort booking platform with immersive UI/UX.',
-            tech: ['React', 'Astro', 'Tailwind'],
+            description: 'Created a vibrant promotional site for a historic hostel, including amenity lists, video testimonials, and social proof sections to drive bookings.',
+            tech: ['Astro', 'Tailwind', 'MongoDB'],
             link: 'https://www.oceanisland.com/',
             github: 'https://github.com/ocean-island/oceanisland-web',
             image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
@@ -397,33 +410,32 @@ const PremiumPortfolio = () => {
 
     const industrialProjects = [
         {
-            company: 'Institutional Portal',
+            company: 'Island Tower Electromechanical',
+            title: 'TRUXO - Equipment Rental',
+            description: 'Led end-to-end web development for heavy equipment rental platform. Built admin dashboard, integrated real-time inventory management, and implemented responsive UI.',
+            impact: 'Production System',
+            tech: ['Next.js 16', 'Supabase', 'Tailwind CSS'],
+            link: 'https://truxo.ae',
+            image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=800',
+        },
+        {
+            company: 'DataHex Digital Solutions',
             title: 'Aljamia Al Islamiya',
-            description: 'Built a college website with dynamic course/event feeds, reducing manual updates by 50%.',
-            impact: '50% faster updates',
-            tech: ['Next.js', 'API Integration', 'Real-time'],
+            description: 'Built a full-stack educational portal using the MERN stack. Designed responsive UI for campus facilities and configured scalable storage for institutional records.',
+            impact: 'Scalable Architecture',
+            tech: ['React.js', 'Node.js', 'MongoDB'],
             link: 'https://www.aljamia.net/',
             image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800',
         },
         {
-            company: 'Cultural Event Site',
-            title: 'Malabar Literature Festival',
-            description: 'Designed an interactive platform supporting 10,000+ virtual attendees with event calendars.',
-            impact: '10K+ virtual attendees',
-            tech: ['EJS', 'Node.js', 'MongoDB'],
-            link: 'https://malabarliteraturefestival.com/',
-            image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=800',
-        },
-        {
-            company: 'Socio-Political Portal',
-            title: 'De Conquista',
-            description: 'Engineered a contemporary content site for cultural discourse with modular layouts.',
-            impact: 'Modular Content Architecture',
-            tech: ['EJS', 'Responsive', 'UI/UX'],
-            link: 'https://deconquista.siokerala.org/',
-            image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800',
-        },
-   
+            company: 'DataHex Digital Solutions',
+            title: 'Ocean Island Inn',
+            description: 'Created a vibrant promotional site for a historic hostel, including amenity lists, video testimonials, and social proof sections to drive bookings.',
+            impact: 'Traveler Engagement',
+            tech: ['Astro', 'Tailwind', 'MongoDB'],
+            link: 'https://www.oceanisland.com/',
+            image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
+        }
     ];
 
     const featuredProjects = [
@@ -461,6 +473,8 @@ const PremiumPortfolio = () => {
         }
     ];
 
+    const allProjects = [...projects, ...featuredProjects];
+
     const skills = [
         { name: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind', 'JavaScript'], icon: Globe },
         { name: 'Backend', items: ['Node.js', 'Express', 'MongoDB', 'Mongoose'], icon: Cpu },
@@ -482,7 +496,7 @@ const PremiumPortfolio = () => {
     }, []);
 
     return (
-        <div ref={containerRef} className="relative min-h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
+        <div ref={containerRef} className="relative min-h-screen bg-zinc-950 text-zinc-100 selection:bg-primary-500/30 font-sans cursor-default overflow-x-hidden">
             {/* ── PRELOADER ── */}
             <AnimatePresence>
                 {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
@@ -623,144 +637,83 @@ const PremiumPortfolio = () => {
             <main className="relative z-10">
 
                 {/* ── HERO SECTION ── */}
-                <section id="home" className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
-                    {/* 3D Parallax Backgrounds */}
-                    <motion.div
-                        className="absolute inset-0 z-0"
-                        style={{
-                            y: useTransform(scrollYProgress, [0, 1], ['0%', '40%']),
-                            opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
-                            scale: useTransform(scrollYProgress, [0, 1], [1, 1.1])
-                        }}
-                    >
-                        <img src="/hero-bg-frontend.png" alt="3D Background" className="w-full h-full object-cover opacity-50 mix-blend-screen" />
-                    </motion.div>
+                <section id="home" className="min-h-screen flex items-center relative overflow-hidden bg-zinc-950">
+                    
+                    {/* Background Ambient Glow & Grid (Trionn Style) */}
+                    <div className="absolute inset-0 z-0">
+                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-900/10 via-zinc-950 to-zinc-950" />
+                        {/* Thin lines crossing like Trionn */}
+                        <div className="absolute top-[20%] left-[-10%] w-[120%] h-[1px] bg-white/[0.03] rotate-[15deg] pointer-events-none" />
+                        <div className="absolute top-[80%] left-[-10%] w-[120%] h-[1px] bg-white/[0.03] -rotate-[10deg] pointer-events-none" />
+                    </div>
 
-                    <motion.div
-                        className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
-                        style={{
-                            y: useTransform(scrollYProgress, [0, 1], ['0%', '70%']),
-                            rotate: useTransform(scrollYProgress, [0, 1], [0, 15]),
-                            scale: useTransform(scrollYProgress, [0, 1], [1, 1.2])
-                        }}
-                    >
-                        <img src="/hero-object-frontend.png" alt="3D Object" className="w-[80vw] md:w-[600px] object-contain opacity-70 mix-blend-screen animate-float" />
-                    </motion.div>
+                    <div className="w-full h-full px-6 lg:px-16 py-24 flex flex-col justify-between relative z-20 pointer-events-none">
+                        
+                        {/* TOP NAV SPACER */}
+                        <div className="h-10" />
+                        
+                        <div className="flex flex-col md:flex-row justify-between items-end w-full h-full mt-20">
+                            {/* LEFT SIDE: Big Typography */}
+                            {isLoaded && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -50 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.8, ease: "easeOut" }}
+                                    className="flex flex-col items-start text-left pointer-events-auto z-20 max-w-2xl mb-12 md:mb-0"
+                                >
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-12 h-[2px] bg-primary-500" />
+                                        <span className="text-primary-400 font-mono tracking-widest uppercase text-sm font-bold">Kiran K — Full-Stack Developer</span>
+                                    </div>
+                                    <h1 className="text-[4rem] sm:text-7xl lg:text-8xl xl:text-[9rem] font-black tracking-tighter leading-[0.95] font-display mb-12 drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] z-30 relative">
+                                        <SplitText text="Building the" className="text-zinc-100 block drop-shadow-2xl" delay={0.3} />
+                                        <SplitText text="web in motion." className="text-zinc-300 block drop-shadow-2xl" delay={0.8} />
+                                    </h1>
+                                    
+                                    <div className="flex items-center gap-6 group cursor-pointer" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
+                                        <span className="text-sm font-mono tracking-widest text-zinc-400 uppercase group-hover:text-primary-400 transition-colors">Start a Project</span>
+                                        <ArrowRight size={18} className="text-zinc-400 group-hover:text-primary-400 group-hover:translate-x-2 transition-all" />
+                                        <div className="w-24 h-[1px] bg-zinc-700 group-hover:bg-primary-500/50 transition-colors" />
+                                    </div>
+                                </motion.div>
+                            )}
 
-                    {isLoaded && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.5 }}
-                            className="w-full max-w-6xl mx-auto relative z-10 p-8 md:p-16 glass-strong rounded-[3rem]"
-                        >
-                            {/* Status Badge */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2, duration: 0.8 }}
-                                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full glass border border-white/10 text-sm font-medium text-primary-300 mb-10 shadow-[0_0_30px_rgba(139,92,246,0.2)]"
-                            >
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500" />
-                                </span>
-                                Open for opportunities
-                            </motion.div>
-
-                            {/* Split Text Name */}
-                            <div className="relative group inline-block cursor-help mb-4">
-                                <h1 className="text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] font-black tracking-tighter leading-[0.85] font-display transition-transform duration-300 group-hover:scale-105" style={{ textShadow: '0 0 80px rgba(139, 92, 246, 0.4)' }}>
-                                    <SplitText text="KIRAN K." className="text-gradient block" delay={0.3} />
-                                </h1>
-                                
-                                {/* Hover Card */}
-                                <div className="absolute top-[80%] left-1/2 -translate-x-1/2 mt-4 w-72 p-5 rounded-2xl bg-zinc-900/90 backdrop-blur-xl border border-white/10 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-50 shadow-[0_0_40px_rgba(139,92,246,0.3)] flex flex-col items-center text-center">
-                                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-primary-600 to-purple-400 mb-3 p-[2px]">
-                                        <div className="w-full h-full rounded-full bg-zinc-900 flex items-center justify-center overflow-hidden">
-                                            <span className="text-2xl">👨‍💻</span>
+                            {/* RIGHT SIDE (BOTTOM): Stats & Paragraph */}
+                            {isLoaded && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: 50 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                                    className="flex flex-col items-end md:items-start text-right md:text-left pointer-events-auto z-20 max-w-xs mb-12 md:mb-0"
+                                >
+                                    <div className="flex items-center border border-white/10 rounded-lg p-5 bg-zinc-900/50 backdrop-blur-md mb-8 w-full">
+                                        <div className="pr-5 border-r border-white/10 flex flex-col items-center">
+                                            <Globe className="text-zinc-400 mb-2" size={26} />
+                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono">EST. 2022</span>
+                                        </div>
+                                        <div className="pl-5">
+                                            <p className="text-xs text-zinc-300 font-mono tracking-widest leading-[1.8] uppercase">
+                                                2+ Years Shaping<br/>Digital Direction.
+                                            </p>
                                         </div>
                                     </div>
-                                    <h3 className="text-lg font-bold text-white mb-1">Kiran K.</h3>
-                                    <p className="text-xs text-zinc-400 mb-3 leading-relaxed">MERN Stack Developer passionate about crafting beautiful & high-performance web experiences.</p>
-                                    <div className="flex flex-wrap gap-2 w-full justify-center">
-                                        <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-primary-300 tracking-wider uppercase font-medium">React</span>
-                                        <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-primary-300 tracking-wider uppercase font-medium">Node.js</span>
-                                        <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-primary-300 tracking-wider uppercase font-medium">MongoDB</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Role subtitle with stagger */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8, duration: 0.8 }}
-                            >
-                                <p className="text-xl md:text-2xl font-light text-zinc-400 tracking-[0.3em] uppercase mb-6">
-                                    Full Stack Developer
-                                </p>
-                            </motion.div>
-
-                            <motion.p
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 1, duration: 0.8 }}
-                                className="max-w-2xl mx-auto text-base md:text-xl text-zinc-400 leading-relaxed mb-12"
-                            >
-                                Transforming complex problems into elegant digital solutions with
-                                <span className="text-zinc-100 font-medium"> 2+ years of experience </span>
-                                building high-performance web systems.
-                            </motion.p>
-
-                            {/* CTA Buttons */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 1.2, duration: 0.8 }}
-                                className="flex flex-col sm:flex-row items-center justify-center gap-5"
-                            >
-                                <Magnetic>
-                                    <button
-                                        onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                                        className="btn-primary group flex items-center gap-3 px-8 py-4 text-lg"
-                                    >
-                                        View Projects
-                                        <ArrowRight size={20} className="transition-transform group-hover:translate-x-2" />
-                                    </button>
-                                </Magnetic>
-                                <div className="flex items-center gap-4">
-                                    <Magnetic>
-                                        <a href="https://github.com/kirank860" target="_blank" rel="noreferrer" className="p-4 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/50 hover:text-white">
-                                            <Github size={22} />
-                                        </a>
-                                    </Magnetic>
-                                    <Magnetic>
-                                        <a href="https://www.linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="p-4 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/50 hover:text-white">
-                                            <Linkedin size={22} />
-                                        </a>
-                                    </Magnetic>
-                                    <Magnetic>
-                                        <a href="mailto:kirankrishnan889@gmail.com" className="p-4 glass rounded-full hover:bg-white/10 transition-all block hover:border-primary-500/50 hover:text-white">
-                                            <Mail size={22} />
-                                        </a>
-                                    </Magnetic>
-                                </div>
-                            </motion.div>
-                        </motion.div>
-                    )}
+                                    <p className="text-sm text-zinc-400 leading-relaxed font-light">
+                                        Websites, AI products, brands, and systems built for clarity, scale and impact.
+                                    </p>
+                                </motion.div>
+                            )}
+                        </div>
+                    </div>
 
                     {/* Scroll Indicator */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 2, duration: 1 }}
-                        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10 mix-blend-difference"
+                        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-30 mix-blend-difference pointer-events-none"
                     >
-                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-medium">Scroll</span>
-                        <div className="scroll-indicator border border-white/20">
-                            <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce mx-auto mt-1 opacity-50" />
-                        </div>
+                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-medium font-mono">Hold to 💥 Blast</span>
+                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-medium font-mono">Dare ⚡️ To Scroll</span>
                     </motion.div>
                 </section>
 
@@ -811,9 +764,9 @@ const PremiumPortfolio = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="text-center md:text-left p-8 glass rounded-3xl"
+                                    className="text-center md:text-left p-8 bg-zinc-900 border border-white/[0.05] rounded-3xl"
                                 >
-                                    <div className="text-4xl md:text-5xl font-black text-gradient-vibrant font-display mb-2">
+                                    <div className="text-4xl md:text-5xl font-black text-white font-display mb-2">
                                         <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                                     </div>
                                     <div className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-semibold">{stat.label}</div>
@@ -831,15 +784,15 @@ const PremiumPortfolio = () => {
                                 className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4"
                             >
                                 {skills.map((skill, idx) => (
-                                    <TiltCard key={idx} className="p-8 glass rounded-3xl glow-card">
+                                    <TiltCard key={idx} className="p-8 bg-zinc-900 border border-white/[0.05] rounded-3xl">
                                         <div className="relative z-10">
-                                            <div className="p-3 glass-strong w-fit rounded-2xl text-primary-400 mb-5">
+                                            <div className="p-3 bg-zinc-800/50 w-fit rounded-2xl text-primary-400 mb-5">
                                                 <skill.icon size={24} />
                                             </div>
-                                            <h3 className="font-bold text-xl mb-4 font-display">{skill.name}</h3>
+                                            <h3 className="font-bold text-xl mb-4 font-display text-white">{skill.name}</h3>
                                             <div className="flex flex-wrap gap-2">
                                                 {skill.items.map((item, i) => (
-                                                    <span key={i} className="text-xs px-3 py-1.5 glass rounded-full text-zinc-400">{item}</span>
+                                                    <span key={i} className="text-xs px-3 py-1.5 bg-zinc-800 text-zinc-400 rounded-full">{item}</span>
                                                 ))}
                                             </div>
                                         </div>
@@ -855,7 +808,7 @@ const PremiumPortfolio = () => {
                                 initial={{ opacity: 0, y: 30 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: 0.2 }}
-                                className="md:col-span-1 p-8 glass rounded-3xl flex flex-col items-center justify-center text-center gap-4 group cursor-pointer no-underline glow-card relative overflow-hidden"
+                                className="md:col-span-1 p-8 bg-zinc-900 border border-white/[0.05] rounded-3xl flex flex-col items-center justify-center text-center gap-4 group cursor-pointer no-underline relative overflow-hidden"
                                 onMouseMove={handleCardMouseMove}
                             >
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary-600/10 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -872,11 +825,11 @@ const PremiumPortfolio = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             initial={{ opacity: 0, y: 30 }}
                             viewport={{ once: true }}
-                            className="mt-4 p-8 md:p-10 glass rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6"
+                            className="mt-4 p-8 md:p-10 bg-zinc-900 border border-white/[0.05] rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="relative h-16 w-16 glass-strong rounded-2xl flex items-center justify-center overflow-hidden">
-                                    <div className="absolute inset-0 bg-primary-500/20 animate-pulse" />
+                                <div className="relative h-16 w-16 bg-zinc-800/50 rounded-2xl flex items-center justify-center overflow-hidden">
+                                    <div className="absolute inset-0 bg-primary-500/10 animate-pulse" />
                                     <MessageSquare className="text-primary-400 relative z-10" />
                                 </div>
                                 <div>
@@ -948,17 +901,17 @@ const PremiumPortfolio = () => {
 
                                     {/* Card */}
                                     <div className={`md:w-[45%] ${idx % 2 === 0 ? 'md:ml-0 md:mr-auto' : 'md:mr-0 md:ml-auto'}`}>
-                                        <TiltCard className="glass rounded-[32px] overflow-hidden glow-card group" onMouseMove={handleCardMouseMove}>
+                                        <TiltCard className="bg-zinc-900 border border-white/[0.05] rounded-[32px] overflow-hidden group" onMouseMove={handleCardMouseMove}>
                                             <div className="relative h-52 overflow-hidden">
                                                 <img
                                                     src={project.image}
                                                     alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
                                                     onError={(e) => {
                                                         e.target.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800';
                                                     }}
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent" />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent" />
                                             </div>
                                             <div className="p-8 relative z-10">
                                                 <div className="flex items-center gap-3 mb-4 flex-wrap">
@@ -973,7 +926,7 @@ const PremiumPortfolio = () => {
                                                             <span key={i} className="text-[10px] text-zinc-600 font-medium">{t}</span>
                                                         ))}
                                                     </div>
-                                                    <a href={project.link} target="_blank" rel="noreferrer" className="p-2.5 glass rounded-full hover:bg-primary-500 hover:text-white transition-all">
+                                                    <a href={project.link} target="_blank" rel="noreferrer" className="p-2.5 bg-zinc-800 rounded-full hover:bg-primary-500 hover:text-white transition-all">
                                                         <ExternalLink size={16} />
                                                     </a>
                                                 </div>
@@ -986,147 +939,86 @@ const PremiumPortfolio = () => {
                     </div>
                 </section>
 
-                {/* ── SELECTED WORKS (Horizontal Scroll) ── */}
-                <section id="projects" ref={projectsRef} className="relative" style={{ height: '250vh' }}>
-                    <div className="sticky top-0 h-screen overflow-hidden">
-                        <div className="h-full flex flex-col justify-center px-4 md:px-12 lg:px-24">
-                            {/* Section Header */}
-                            <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-10 gap-4">
-                                <div>
-                                    <span className="text-primary-400 font-bold tracking-widest uppercase text-xs mb-4 block">Portfolio</span>
-                                    <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter font-display">
-                                        <span className="text-gradient">Selected</span>{' '}
-                                        <span className="text-stroke">Works</span>
-                                    </h2>
-                                </div>
-                                <p className="text-zinc-500 max-w-sm text-sm">A curated collection of projects blending technical precision with creative design.</p>
-                            </div>
+                {/* ── PROJECTS (Sticky Stack) ── */}
+                <section id="projects" ref={projectsRef} className="relative pb-[30vh]">
+                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between px-4 md:px-12 lg:px-24 mb-20 pt-20">
+                        <div>
+                            <span className="text-primary-400 font-bold tracking-widest uppercase text-xs mb-4 block">Portfolio</span>
+                            <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter font-display">
+                                <span className="text-gradient">Selected</span>{' '}
+                                <span className="text-stroke">Works</span>
+                            </h2>
+                        </div>
+                        <p className="text-zinc-500 max-w-sm text-sm mt-6 md:mt-0">A curated collection of projects blending technical precision with creative design.</p>
+                    </div>
 
-                            {/* Horizontal Scroll Track */}
-                            <motion.div
-                                style={{ x: projectsX }}
-                                className="flex gap-8"
+                    <div className="w-full max-w-7xl mx-auto px-4 md:px-12 lg:px-24">
+                        {allProjects.map((project, idx) => (
+                            <div 
+                                key={idx} 
+                                className="sticky w-full h-[75vh] flex items-center justify-center mb-16"
+                                style={{ top: `calc(15vh + ${idx * 40}px)` }}
                             >
-                                {projects.map((project, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        className="project-card-hover group relative flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[35vw] h-[55vh] rounded-[32px] overflow-hidden glass glow-card"
-                                        onMouseMove={handleCardMouseMove}
-                                    >
-                                        <img
-                                            src={project.image}
-                                            alt={project.title}
-                                            className="project-image absolute inset-0 w-full h-full object-cover opacity-60"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
-                                        <div
-                                            className="absolute inset-0 opacity-20"
-                                            style={{ background: `linear-gradient(135deg, ${project.color}22, transparent)` }}
-                                        />
-
-                                        <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end relative z-10">
-                                            <div className="flex gap-2 mb-4">
+                                <div className="w-full h-full rounded-[40px] overflow-hidden relative group shadow-2xl bg-zinc-900 border border-white/5 transition-transform duration-500 hover:scale-[1.02]">
+                                    <img 
+                                        src={project.image} 
+                                        alt={project.title} 
+                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-90"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+                                    
+                                    {/* Content */}
+                                    <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-between">
+                                        <div className="flex justify-between items-start">
+                                            <span className="text-6xl md:text-[8rem] font-black text-white/10 font-display italic leading-none transition-colors duration-500 group-hover:text-white/20">
+                                                {(idx + 1).toString().padStart(2, '0')}
+                                            </span>
+                                            <div className="flex gap-4">
+                                                {project.github && (
+                                                    <a href={project.github} target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full bg-zinc-950/80 backdrop-blur-sm text-white flex items-center justify-center hover:bg-primary-500 transition-colors duration-300">
+                                                        <Github size={20} />
+                                                    </a>
+                                                )}
+                                                {project.link !== '#' && (
+                                                    <a href={project.link} target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full bg-zinc-950/80 backdrop-blur-sm text-white flex items-center justify-center hover:bg-primary-500 transition-colors duration-300 group/link">
+                                                        <ExternalLink size={20} className="group-hover/link:-translate-y-1 group-hover/link:translate-x-1 transition-transform" />
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex gap-2 mb-6 flex-wrap">
                                                 {project.tech.map((t, i) => (
-                                                    <span key={i} className="px-3 py-1 glass-strong rounded-full text-xs font-medium text-primary-300">{t}</span>
+                                                    <span key={i} className="px-4 py-1.5 bg-zinc-950/50 backdrop-blur-md rounded-full text-[10px] md:text-xs font-bold text-zinc-300 tracking-widest uppercase border border-white/5">{t}</span>
                                                 ))}
                                             </div>
-                                            <h3 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight font-display uppercase">{project.title}</h3>
-                                            <p className="text-zinc-400 mb-6 line-clamp-2 max-w-md">{project.description}</p>
-
-                                            <div className="project-overlay flex items-center gap-4">
-                                                <a href={project.link} target="_blank" rel="noreferrer" className="btn-primary py-3 px-6 text-sm">
-                                                    Live Demo
-                                                </a>
-                                                <a href={project.github} target="_blank" rel="noreferrer" className="p-3 glass-strong rounded-full hover:bg-white/10 transition-colors">
-                                                    <Github size={18} />
-                                                </a>
-                                            </div>
+                                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tighter font-display uppercase text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">{project.title}</h3>
+                                            <p className="text-zinc-300 text-base md:text-lg max-w-2xl drop-shadow-md line-clamp-2 md:line-clamp-none">{project.description}</p>
                                         </div>
-                                    </motion.div>
-                                ))}
-                            </motion.div>
-                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
+
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="mt-20 text-center relative z-10"
+                    >
+                        <a
+                            href="https://github.com/kirank860"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 border border-white/5 hover:border-white/10 rounded-full text-zinc-400 hover:text-white transition-all hover:bg-zinc-800 shadow-xl"
+                        >
+                            View More on GitHub
+                            <ExternalLink size={16} />
+                        </a>
+                    </motion.div>
                 </section>
 
-                {/* ── FEATURED PROJECTS GRID ── */}
-                <section className="px-4 md:px-12 lg:px-24 pb-20 md:pb-36 pt-10 md:pt-20">
-                    <div className="max-w-7xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="mb-16"
-                        >
-                            <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter font-display mb-4">
-                                <span className="text-gradient">Featured</span>{' '}
-                                <span className="text-stroke">Projects</span>
-                            </h2>
-                            <p className="text-zinc-500 text-lg max-w-2xl">Exploring new technologies and building innovative solutions across different domains.</p>
-                        </motion.div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                            {featuredProjects.map((project, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, y: 40 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: idx * 0.1 }}
-                                >
-                                    <TiltCard className="glass rounded-3xl p-5 hover:bg-white/[0.04] transition-all duration-500 flex flex-col h-full glow-card group" onMouseMove={handleCardMouseMove}>
-                                        <div className="relative h-44 mb-5 rounded-2xl overflow-hidden">
-                                            <img
-                                                src={project.image}
-                                                alt={project.title}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            />
-                                            <div className="absolute inset-0 bg-zinc-950/20 group-hover:bg-zinc-950/0 transition-colors duration-500" />
-                                        </div>
-                                        <div className="relative z-10">
-                                            <h3 className="text-lg font-bold mb-2 group-hover:text-primary-400 transition-colors font-display">{project.title}</h3>
-                                            <p className="text-zinc-500 text-sm mb-5 line-clamp-2">{project.description}</p>
-                                            <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
-                                                <div className="flex gap-2">
-                                                    {project.tech.slice(0, 2).map((t, i) => (
-                                                        <span key={i} className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold">{t}</span>
-                                                    ))}
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <a href={project.github} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-primary-400 transition-colors">
-                                                        <Github size={16} />
-                                                    </a>
-                                                    {project.link !== '#' && (
-                                                        <a href={project.link} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-primary-400 transition-colors">
-                                                            <ExternalLink size={16} />
-                                                        </a>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </TiltCard>
-                                </motion.div>
-                            ))}
-                        </div>
-
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="mt-12 text-center"
-                        >
-                            <a
-                                href="https://github.com/kirank860"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-2 px-8 py-4 btn-outline rounded-full text-zinc-400 hover:text-zinc-100 transition-all"
-                            >
-                                View More on GitHub
-                                <ExternalLink size={16} />
-                            </a>
-                        </motion.div>
-                    </div>
-                </section>
 
                 {/* ── CONTACT SECTION ── */}
                 <section id="contact" className="section-padding relative overflow-hidden">
@@ -1153,7 +1045,7 @@ const PremiumPortfolio = () => {
                         </motion.div>
 
                         {/* Contact Content */}
-                        <div className="glass rounded-[40px] p-8 md:p-14 lg:p-20 overflow-hidden relative">
+                        <div className="bg-zinc-900 border border-white/[0.05] rounded-[40px] p-8 md:p-14 lg:p-20 overflow-hidden relative">
                             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary-500/5 blur-[100px] -z-10" />
 
                             <div className="grid md:grid-cols-2 gap-12 md:gap-16">
@@ -1163,30 +1055,30 @@ const PremiumPortfolio = () => {
                                     </h3>
                                     <div className="space-y-8">
                                         <a href="mailto:kirankrishnan889@gmail.com" className="flex items-center gap-5 group">
-                                            <div className="p-4 glass-strong rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                            <div className="p-4 bg-zinc-800 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
                                                 <Mail size={22} className="text-primary-400" />
                                             </div>
                                             <div>
-                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-600 font-bold mb-1">Email</p>
-                                                <span className="text-base md:text-lg font-medium magnetic-link break-all">kirankrishnan889@gmail.com</span>
+                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Email</p>
+                                                <span className="text-base md:text-lg font-medium text-white break-all">kirankrishnan889@gmail.com</span>
                                             </div>
                                         </a>
                                         <a href="https://linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="flex items-center gap-5 group">
-                                            <div className="p-4 glass-strong rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                            <div className="p-4 bg-zinc-800 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
                                                 <Linkedin size={22} className="text-primary-400" />
                                             </div>
                                             <div>
-                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-600 font-bold mb-1">Social</p>
-                                                <span className="text-lg font-medium magnetic-link">LinkedIn Profile</span>
+                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Social</p>
+                                                <span className="text-lg font-medium text-white">LinkedIn Profile</span>
                                             </div>
                                         </a>
                                         <div className="flex items-center gap-5 group">
-                                            <div className="p-4 glass-strong rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                            <div className="p-4 bg-zinc-800 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
                                                 <Globe size={22} className="text-primary-400" />
                                             </div>
                                             <div>
-                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-600 font-bold mb-1">Location</p>
-                                                <span className="text-lg font-medium">India</span>
+                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Location</p>
+                                                <span className="text-lg font-medium text-white">India</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1194,26 +1086,26 @@ const PremiumPortfolio = () => {
 
                                 <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Name</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 ml-1">Name</label>
                                         <input
                                             type="text"
-                                            className="w-full bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/30 transition-all text-sm"
+                                            className="w-full bg-zinc-950 border border-white/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-white"
                                             placeholder="Enter your name"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Email</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 ml-1">Email</label>
                                         <input
                                             type="email"
-                                            className="w-full bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/30 transition-all text-sm"
+                                            className="w-full bg-zinc-950 border border-white/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-white"
                                             placeholder="Enter your email"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Message</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 ml-1">Message</label>
                                         <textarea
                                             rows={4}
-                                            className="w-full bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/30 transition-all resize-none text-sm"
+                                            className="w-full bg-zinc-950 border border-white/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all resize-none text-sm text-white"
                                             placeholder="How can I help you?"
                                         />
                                     </div>
