@@ -49,7 +49,7 @@ const Preloader = ({ onComplete }) => {
             <div className="preloader-bar">
                 <div className="preloader-bar-fill" />
             </div>
-            <div className="text-sm text-zinc-500 font-mono tracking-widest">
+            <div className="text-sm text-zinc-400 font-mono tracking-widest">
                 {Math.min(counter, 100)}%
             </div>
         </div>
@@ -284,6 +284,8 @@ const PremiumPortfolio = () => {
     const containerRef = useRef(null);
     const projectsRef = useRef(null);
     const timelineRef = useRef(null);
+    const heroVideoRef = useRef(null);
+    const heroSectionRef = useRef(null);
 
     // Cursor tracking
     useEffect(() => {
@@ -321,6 +323,62 @@ const PremiumPortfolio = () => {
         }, { threshold: 0.3 });
         sectionElements.forEach(el => observer.observe(el));
         return () => observer.disconnect();
+    }, [isLoaded]);
+
+    // Scroll-driven video scrubbing
+    const heroScrollRef = useRef(null);
+    useEffect(() => {
+        const video = heroVideoRef.current;
+        const scrollContainer = heroScrollRef.current;
+        if (!video || !scrollContainer) return;
+
+        // Pause autoplay — scroll controls it now
+        video.pause();
+
+        let currentTime = 0;
+        let targetTime = 0;
+        let rafId = null;
+
+        const lerp = (start, end, factor) => start + (end - start) * factor;
+
+        const updateVideoTime = () => {
+            currentTime = lerp(currentTime, targetTime, 0.08);
+            
+            if (video.duration && isFinite(video.duration)) {
+                video.currentTime = Math.max(0, Math.min(currentTime, video.duration - 0.01));
+            }
+            
+            rafId = requestAnimationFrame(updateVideoTime);
+        };
+
+        const handleScroll = () => {
+            if (!video.duration) return;
+            
+            // Fast calculation without triggering layout thrashing
+            const scrollHeight = window.innerHeight * 2; // Because container is 300vh, minus 100vh viewport
+            const progress = Math.max(0, Math.min(1, window.scrollY / scrollHeight));
+            
+            targetTime = progress * video.duration;
+        };
+
+        // Wait for video metadata to load
+        const startScrubbing = () => {
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            rafId = requestAnimationFrame(updateVideoTime);
+            handleScroll(); // set initial position
+        };
+
+        if (video.readyState >= 1) {
+            startScrubbing();
+        } else {
+            video.addEventListener('loadedmetadata', startScrubbing);
+        }
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (rafId) cancelAnimationFrame(rafId);
+            video.removeEventListener('loadedmetadata', startScrubbing);
+        };
     }, [isLoaded]);
 
     // Scroll progress
@@ -496,7 +554,7 @@ const PremiumPortfolio = () => {
     }, []);
 
     return (
-        <div ref={containerRef} className="relative min-h-screen bg-zinc-950 text-zinc-100 selection:bg-primary-500/30 font-sans cursor-default overflow-x-hidden">
+        <div ref={containerRef} className="relative min-h-screen bg-[#9C9691] text-zinc-100 selection:bg-primary-500/30 font-sans cursor-default">
             {/* ── PRELOADER ── */}
             <AnimatePresence>
                 {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
@@ -565,7 +623,7 @@ const PremiumPortfolio = () => {
                                     "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-500 capitalize relative",
                                     activeSection === section
                                         ? "text-white"
-                                        : "text-zinc-500 hover:text-zinc-200"
+                                        : "text-zinc-200 hover:text-white"
                                 )}
                             >
                                 {activeSection === section && (
@@ -596,7 +654,7 @@ const PremiumPortfolio = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-zinc-950/95 backdrop-blur-xl md:hidden flex flex-col items-center justify-center p-8"
+                        className="fixed inset-0 z-[100] bg-zinc-950/95 backdrop-blur-2xl md:hidden flex flex-col items-center justify-center p-8"
                     >
                         <button
                             onClick={() => setIsMenuOpen(false)}
@@ -604,7 +662,7 @@ const PremiumPortfolio = () => {
                         >
                             <X size={32} />
                         </button>
-                        <div className="flex flex-col items-center gap-6">
+                        <div className="flex flex-col items-center gap-8">
                             {sections.map((section, i) => (
                                 <motion.button
                                     key={section}
@@ -617,10 +675,10 @@ const PremiumPortfolio = () => {
                                         setIsMenuOpen(false);
                                     }}
                                     className={cn(
-                                        "text-5xl font-black tracking-tighter uppercase font-display transition-colors",
+                                        "text-4xl font-black tracking-tighter uppercase font-display transition-colors",
                                         activeSection === section
-                                            ? "text-gradient-vibrant"
-                                            : "text-stroke text-stroke-hover"
+                                            ? "text-primary-400"
+                                            : "text-zinc-100 hover:text-primary-300"
                                     )}
                                 >
                                     {section}
@@ -636,44 +694,73 @@ const PremiumPortfolio = () => {
                 ══════════════════════════════════ */}
             <main className="relative z-10">
 
-                {/* ── HERO SECTION ── */}
-                <section id="home" className="min-h-screen flex items-center relative overflow-hidden bg-zinc-950">
+                {/* ── HERO SECTION (Scroll-Scrub Wrapper) ── */}
+                <div ref={heroScrollRef} className="relative" style={{ height: '300vh', backgroundColor: '#8A8580' }}>
+                <section id="home" ref={heroSectionRef} className="sticky top-0 h-screen flex items-center relative overflow-hidden" style={{ backgroundColor: '#8A8580' }}>
                     
-                    {/* Background Ambient Glow & Grid (Trionn Style) */}
+                    {/* Background Ambient Glow & Grid */}
                     <div className="absolute inset-0 z-0">
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-900/10 via-zinc-950 to-zinc-950" />
                         {/* Thin lines crossing like Trionn */}
-                        <div className="absolute top-[20%] left-[-10%] w-[120%] h-[1px] bg-white/[0.03] rotate-[15deg] pointer-events-none" />
-                        <div className="absolute top-[80%] left-[-10%] w-[120%] h-[1px] bg-white/[0.03] -rotate-[10deg] pointer-events-none" />
+                        <div className="absolute top-[20%] left-[-10%] w-[120%] h-[1px] bg-white/[0.06] rotate-[15deg] pointer-events-none" />
+                        <div className="absolute top-[80%] left-[-10%] w-[120%] h-[1px] bg-white/[0.06] -rotate-[10deg] pointer-events-none" />
                     </div>
 
-                    <div className="w-full h-full px-6 lg:px-16 py-24 flex flex-col justify-between relative z-20 pointer-events-none">
+                    {/* Gradient transition at bottom to blend hero into rest of the site */}
+                    <div className="absolute bottom-0 left-0 w-full h-48 z-20 pointer-events-none" style={{ background: 'linear-gradient(to top, #9C9691, transparent)' }} />
+
+                    {/* HERO CENTER VIDEO */}
+                    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none overflow-hidden">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="relative w-[100vw] h-[100vh] flex items-center justify-center"
+                        >
+                            <video 
+                                ref={heroVideoRef}
+                                src="/3d.mp4" 
+                                muted 
+                                playsInline
+                                preload="auto"
+                                className="w-full h-full object-contain scale-[2] sm:scale-150 md:scale-125 lg:scale-110"
+                            />
+                        </motion.div>
+                    </div>
+
+                    {/* Purple gradient overlay */}
+                    <div 
+                        className="absolute inset-0 z-[15] pointer-events-none"
+                        style={{ 
+                            background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(139, 92, 246, 0.15) 30%, rgba(167, 139, 250, 0.1) 50%, transparent 70%)'
+                        }} 
+                    />
+
+                    <div className="w-full h-full px-4 sm:px-6 lg:px-16 py-16 sm:py-24 flex flex-col justify-end relative z-20 pointer-events-none min-h-screen">
                         
                         {/* TOP NAV SPACER */}
-                        <div className="h-10" />
+                        <div className="h-16 sm:h-10" />
                         
-                        <div className="flex flex-col md:flex-row justify-between items-end w-full h-full mt-20">
-                            {/* LEFT SIDE: Big Typography */}
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-end w-full gap-8 md:gap-0 mt-auto">
+                            {/* LEFT SIDE: Typography */}
                             {isLoaded && (
                                 <motion.div
                                     initial={{ opacity: 0, x: -50 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.8, ease: "easeOut" }}
-                                    className="flex flex-col items-start text-left pointer-events-auto z-20 max-w-2xl mb-12 md:mb-0"
+                                    className="flex flex-col items-start text-left pointer-events-auto z-20 max-w-xl"
                                 >
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <div className="w-12 h-[2px] bg-primary-500" />
-                                        <span className="text-primary-400 font-mono tracking-widest uppercase text-sm font-bold">Kiran K — Full-Stack Developer</span>
+                                    <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
+                                        <div className="w-6 sm:w-12 h-[2px] bg-primary-500 flex-shrink-0" />
+                                        <span className="text-primary-400 font-mono tracking-wider sm:tracking-widest uppercase text-[9px] sm:text-sm font-bold">Kiran K · Full-Stack Developer</span>
                                     </div>
-                                    <h1 className="text-[4rem] sm:text-7xl lg:text-8xl xl:text-[9rem] font-black tracking-tighter leading-[0.95] font-display mb-12 drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] z-30 relative">
-                                        <SplitText text="Building the" className="text-zinc-100 block drop-shadow-2xl" delay={0.3} />
-                                        <SplitText text="web in motion." className="text-zinc-300 block drop-shadow-2xl" delay={0.8} />
+                                    <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter leading-[1.05] font-display mb-6 sm:mb-10 drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] z-30 relative">
+                                        <SplitText text="Building the" className="text-zinc-100 block drop-shadow-xl" delay={0.3} />
+                                        <SplitText text="web in motion." className="text-white/80 block drop-shadow-xl" delay={0.8} />
                                     </h1>
                                     
-                                    <div className="flex items-center gap-6 group cursor-pointer" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
-                                        <span className="text-sm font-mono tracking-widest text-zinc-400 uppercase group-hover:text-primary-400 transition-colors">Start a Project</span>
-                                        <ArrowRight size={18} className="text-zinc-400 group-hover:text-primary-400 group-hover:translate-x-2 transition-all" />
-                                        <div className="w-24 h-[1px] bg-zinc-700 group-hover:bg-primary-500/50 transition-colors" />
+                                    <div className="flex items-center gap-4 sm:gap-6 group cursor-pointer" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
+                                        <span className="text-xs sm:text-sm font-mono tracking-widest text-white/70 uppercase group-hover:text-primary-400 transition-colors">Start a Project</span>
+                                        <ArrowRight size={16} className="text-white/70 group-hover:text-primary-400 group-hover:translate-x-2 transition-all" />
                                     </div>
                                 </motion.div>
                             )}
@@ -684,38 +771,28 @@ const PremiumPortfolio = () => {
                                     initial={{ opacity: 0, x: 50 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                                    className="flex flex-col items-end md:items-start text-right md:text-left pointer-events-auto z-20 max-w-xs mb-12 md:mb-0"
+                                    className="flex flex-col items-start md:items-start text-left pointer-events-auto z-20 max-w-xs mb-6 md:mb-0"
                                 >
-                                    <div className="flex items-center border border-white/10 rounded-lg p-5 bg-zinc-900/50 backdrop-blur-md mb-8 w-full">
-                                        <div className="pr-5 border-r border-white/10 flex flex-col items-center">
-                                            <Globe className="text-zinc-400 mb-2" size={26} />
-                                            <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono">EST. 2022</span>
+                                    <div className="flex items-center border border-white/10 rounded-lg p-3 sm:p-5 bg-black/10 backdrop-blur-md mb-4 sm:mb-8 w-full">
+                                        <div className="pr-3 sm:pr-5 border-r border-white/10 flex flex-col items-center">
+                                            <Globe className="text-white/80 mb-2" size={22} />
+                                            <span className="text-[9px] sm:text-[10px] text-white/60 uppercase tracking-widest font-mono">EST. 2022</span>
                                         </div>
-                                        <div className="pl-5">
-                                            <p className="text-xs text-zinc-300 font-mono tracking-widest leading-[1.8] uppercase">
+                                        <div className="pl-3 sm:pl-5">
+                                            <p className="text-[10px] sm:text-xs text-white font-mono tracking-widest leading-[1.8] uppercase font-bold">
                                                 2+ Years Shaping<br/>Digital Direction.
                                             </p>
                                         </div>
                                     </div>
-                                    <p className="text-sm text-zinc-400 leading-relaxed font-light">
+                                    <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-medium">
                                         Websites, AI products, brands, and systems built for clarity, scale and impact.
                                     </p>
                                 </motion.div>
                             )}
                         </div>
                     </div>
-
-                    {/* Scroll Indicator */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 2, duration: 1 }}
-                        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-30 mix-blend-difference pointer-events-none"
-                    >
-                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-400 font-medium font-mono">Hold to 💥 Blast</span>
-                        <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-medium font-mono">Dare ⚡️ To Scroll</span>
-                    </motion.div>
                 </section>
+                </div>
 
                 {/* ── MARQUEE BAND ── */}
                 <div className="py-8 border-y border-white/[0.04] overflow-hidden">
@@ -737,7 +814,7 @@ const PremiumPortfolio = () => {
                             className="mb-20"
                         >
                             <span className="text-primary-400 font-bold tracking-widest uppercase text-xs mb-6 block">About Me</span>
-                            <h2 className="text-5xl md:text-7xl lg:text-8xl font-black italic tracking-tighter font-display mb-8">
+                            <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black italic tracking-tighter font-display mb-8">
                                 <span className="text-gradient">Crafting</span>{' '}
                                 <span className="text-stroke">digital</span><br />
                                 <span className="text-gradient-vibrant">excellence.</span>
@@ -747,11 +824,11 @@ const PremiumPortfolio = () => {
                         {/* Word-by-word reveal paragraph */}
                         <WordReveal
                             text="I specialize in the MERN stack and modern cloud architectures. My focus is on building scalable applications that provide seamless user experiences through performance-driven code and intuitive design. Every project I take on is an opportunity to push boundaries and deliver something extraordinary."
-                            className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed tracking-tight mb-20 max-w-5xl"
+                            className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed tracking-tight mb-12 sm:mb-20 max-w-5xl"
                         />
 
                         {/* Stats Row */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-12 sm:mb-20">
                             {[
                                 { value: '2', suffix: '+', label: 'Years Experience' },
                                 { value: '10', suffix: '+', label: 'Projects Built' },
@@ -764,12 +841,12 @@ const PremiumPortfolio = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="text-center md:text-left p-8 bg-zinc-900 border border-white/[0.05] rounded-3xl"
+                                    className="text-center md:text-left p-4 sm:p-8 glass rounded-2xl sm:rounded-3xl"
                                 >
-                                    <div className="text-4xl md:text-5xl font-black text-white font-display mb-2">
+                                    <div className="text-2xl sm:text-4xl md:text-5xl font-black text-zinc-100 font-display mb-1 sm:mb-2">
                                         <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                                     </div>
-                                    <div className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-semibold">{stat.label}</div>
+                                    <div className="text-xs uppercase tracking-[0.2em] text-zinc-400 font-semibold">{stat.label}</div>
                                 </motion.div>
                             ))}
                         </div>
@@ -784,15 +861,15 @@ const PremiumPortfolio = () => {
                                 className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4"
                             >
                                 {skills.map((skill, idx) => (
-                                    <TiltCard key={idx} className="p-8 bg-zinc-900 border border-white/[0.05] rounded-3xl">
+                                    <TiltCard key={idx} className="p-8 glass rounded-3xl">
                                         <div className="relative z-10">
-                                            <div className="p-3 bg-zinc-800/50 w-fit rounded-2xl text-primary-400 mb-5">
+                                            <div className="p-3 bg-white/40 w-fit rounded-2xl text-primary-400 mb-5">
                                                 <skill.icon size={24} />
                                             </div>
-                                            <h3 className="font-bold text-xl mb-4 font-display text-white">{skill.name}</h3>
+                                            <h3 className="font-bold text-xl mb-4 font-display text-zinc-100">{skill.name}</h3>
                                             <div className="flex flex-wrap gap-2">
                                                 {skill.items.map((item, i) => (
-                                                    <span key={i} className="text-xs px-3 py-1.5 bg-zinc-800 text-zinc-400 rounded-full">{item}</span>
+                                                    <span key={i} className="text-xs px-3 py-1.5 bg-white/40 text-zinc-400 rounded-full">{item}</span>
                                                 ))}
                                             </div>
                                         </div>
@@ -808,14 +885,14 @@ const PremiumPortfolio = () => {
                                 initial={{ opacity: 0, y: 30 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: 0.2 }}
-                                className="md:col-span-1 p-8 bg-zinc-900 border border-white/[0.05] rounded-3xl flex flex-col items-center justify-center text-center gap-4 group cursor-pointer no-underline relative overflow-hidden"
+                                className="md:col-span-1 p-8 glass rounded-3xl flex flex-col items-center justify-center text-center gap-4 group cursor-pointer no-underline relative overflow-hidden"
                                 onMouseMove={handleCardMouseMove}
                             >
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary-600/10 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 <div className="relative z-10">
                                     <Download size={48} className="text-primary-500 transition-transform group-hover:-translate-y-2 duration-500 mx-auto" />
                                     <h3 className="font-bold text-xl uppercase tracking-widest font-display mt-4">Resume</h3>
-                                    <p className="text-sm text-zinc-500 mt-2">Download my full profile</p>
+                                    <p className="text-sm text-zinc-400 mt-2">Download my full profile</p>
                                 </div>
                             </motion.a>
                         </div>
@@ -825,16 +902,16 @@ const PremiumPortfolio = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             initial={{ opacity: 0, y: 30 }}
                             viewport={{ once: true }}
-                            className="mt-4 p-8 md:p-10 bg-zinc-900 border border-white/[0.05] rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6"
+                            className="mt-4 p-8 md:p-10 glass rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="relative h-16 w-16 bg-zinc-800/50 rounded-2xl flex items-center justify-center overflow-hidden">
+                                <div className="relative h-16 w-16 bg-white/40 rounded-2xl flex items-center justify-center overflow-hidden">
                                     <div className="absolute inset-0 bg-primary-500/10 animate-pulse" />
                                     <MessageSquare className="text-primary-400 relative z-10" />
                                 </div>
                                 <div>
                                     <h3 className="text-2xl font-bold font-display">Have a project in mind?</h3>
-                                    <p className="text-zinc-500">I'm currently accepting new freelance projects.</p>
+                                    <p className="text-zinc-400">I'm currently accepting new freelance projects.</p>
                                 </div>
                             </div>
                             <Magnetic>
@@ -870,11 +947,11 @@ const PremiumPortfolio = () => {
                             className="mb-20 max-w-2xl"
                         >
                             <span className="text-primary-400 font-bold tracking-widest uppercase text-xs mb-6 block">Professional Impact</span>
-                            <h2 className="text-5xl md:text-7xl lg:text-8xl font-black italic tracking-tighter font-display mb-6">
+                            <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black italic tracking-tighter font-display mb-6">
                                 <span className="text-gradient">Industrial</span><br />
                                 <span className="text-stroke">Projects</span>
                             </h2>
-                            <p className="text-zinc-500 text-lg leading-relaxed">
+                            <p className="text-zinc-400 text-lg leading-relaxed">
                                 High-scale solutions delivered for institutions and enterprises, focusing on architecture and business results.
                             </p>
                         </motion.div>
@@ -901,7 +978,7 @@ const PremiumPortfolio = () => {
 
                                     {/* Card */}
                                     <div className={`md:w-[45%] ${idx % 2 === 0 ? 'md:ml-0 md:mr-auto' : 'md:mr-0 md:ml-auto'}`}>
-                                        <TiltCard className="bg-zinc-900 border border-white/[0.05] rounded-[32px] overflow-hidden group" onMouseMove={handleCardMouseMove}>
+                                        <TiltCard className="glass rounded-[32px] overflow-hidden group" onMouseMove={handleCardMouseMove}>
                                             <div className="relative h-52 overflow-hidden">
                                                 <img
                                                     src={project.image}
@@ -915,18 +992,18 @@ const PremiumPortfolio = () => {
                                             </div>
                                             <div className="p-8 relative z-10">
                                                 <div className="flex items-center gap-3 mb-4 flex-wrap">
-                                                    <span className="px-3 py-1 glass rounded-full text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{project.company}</span>
+                                                    <span className="px-3 py-1 glass rounded-full text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{project.company}</span>
                                                     <span className="text-primary-400 text-[10px] font-bold uppercase tracking-widest">{project.impact}</span>
                                                 </div>
                                                 <h3 className="text-2xl font-bold mb-3 group-hover:text-primary-400 transition-colors font-display">{project.title}</h3>
-                                                <p className="text-zinc-500 mb-6 text-sm leading-relaxed">{project.description}</p>
+                                                <p className="text-zinc-400 mb-6 text-sm leading-relaxed">{project.description}</p>
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex gap-2">
                                                         {project.tech.map((t, i) => (
-                                                            <span key={i} className="text-[10px] text-zinc-600 font-medium">{t}</span>
+                                                            <span key={i} className="text-[10px] text-zinc-300 font-medium">{t}</span>
                                                         ))}
                                                     </div>
-                                                    <a href={project.link} target="_blank" rel="noreferrer" className="p-2.5 bg-zinc-800 rounded-full hover:bg-primary-500 hover:text-white transition-all">
+                                                    <a href={project.link} target="_blank" rel="noreferrer" className="p-2.5 bg-white/40 rounded-full hover:bg-primary-500 hover:text-zinc-100 transition-all">
                                                         <ExternalLink size={16} />
                                                     </a>
                                                 </div>
@@ -944,43 +1021,42 @@ const PremiumPortfolio = () => {
                     <div className="flex flex-col md:flex-row items-start md:items-end justify-between px-4 md:px-12 lg:px-24 mb-20 pt-20">
                         <div>
                             <span className="text-primary-400 font-bold tracking-widest uppercase text-xs mb-4 block">Portfolio</span>
-                            <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter font-display">
+                            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black italic tracking-tighter font-display">
                                 <span className="text-gradient">Selected</span>{' '}
                                 <span className="text-stroke">Works</span>
                             </h2>
                         </div>
-                        <p className="text-zinc-500 max-w-sm text-sm mt-6 md:mt-0">A curated collection of projects blending technical precision with creative design.</p>
+                        <p className="text-zinc-400 max-w-sm text-sm mt-6 md:mt-0">A curated collection of projects blending technical precision with creative design.</p>
                     </div>
 
                     <div className="w-full max-w-7xl mx-auto px-4 md:px-12 lg:px-24">
                         {allProjects.map((project, idx) => (
                             <div 
                                 key={idx} 
-                                className="sticky w-full h-[75vh] flex items-center justify-center mb-16"
-                                style={{ top: `calc(15vh + ${idx * 40}px)` }}
+                                className="w-full h-[50vh] sm:h-[65vh] md:h-[75vh] flex items-center justify-center mb-8 sm:mb-16"
                             >
-                                <div className="w-full h-full rounded-[40px] overflow-hidden relative group shadow-2xl bg-zinc-900 border border-white/5 transition-transform duration-500 hover:scale-[1.02]">
+                                <div className="w-full h-full rounded-[40px] overflow-hidden relative group shadow-2xl shadow-black/10 glass transition-transform duration-500 hover:scale-[1.02]">
                                     <img 
                                         src={project.image} 
                                         alt={project.title} 
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-90"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#9C9691] via-zinc-950/40 to-transparent" />
                                     
                                     {/* Content */}
-                                    <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-between">
+                                    <div className="absolute inset-0 p-4 sm:p-8 md:p-16 flex flex-col justify-between">
                                         <div className="flex justify-between items-start">
-                                            <span className="text-6xl md:text-[8rem] font-black text-white/10 font-display italic leading-none transition-colors duration-500 group-hover:text-white/20">
+                                            <span className="text-4xl sm:text-6xl md:text-[8rem] font-black text-zinc-100/10 font-display italic leading-none transition-colors duration-500 group-hover:text-zinc-100/20">
                                                 {(idx + 1).toString().padStart(2, '0')}
                                             </span>
                                             <div className="flex gap-4">
                                                 {project.github && (
-                                                    <a href={project.github} target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full bg-zinc-950/80 backdrop-blur-sm text-white flex items-center justify-center hover:bg-primary-500 transition-colors duration-300">
+                                                    <a href={project.github} target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#9C9691]/80 backdrop-blur-sm text-zinc-100 flex items-center justify-center hover:bg-primary-500 transition-colors duration-300">
                                                         <Github size={20} />
                                                     </a>
                                                 )}
                                                 {project.link !== '#' && (
-                                                    <a href={project.link} target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full bg-zinc-950/80 backdrop-blur-sm text-white flex items-center justify-center hover:bg-primary-500 transition-colors duration-300 group/link">
+                                                    <a href={project.link} target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#9C9691]/80 backdrop-blur-sm text-zinc-100 flex items-center justify-center hover:bg-primary-500 transition-colors duration-300 group/link">
                                                         <ExternalLink size={20} className="group-hover/link:-translate-y-1 group-hover/link:translate-x-1 transition-transform" />
                                                     </a>
                                                 )}
@@ -989,11 +1065,11 @@ const PremiumPortfolio = () => {
                                         <div>
                                             <div className="flex gap-2 mb-6 flex-wrap">
                                                 {project.tech.map((t, i) => (
-                                                    <span key={i} className="px-4 py-1.5 bg-zinc-950/50 backdrop-blur-md rounded-full text-[10px] md:text-xs font-bold text-zinc-300 tracking-widest uppercase border border-white/5">{t}</span>
+                                                    <span key={i} className="px-4 py-1.5 bg-[#9C9691]/50 backdrop-blur-md rounded-full text-[10px] md:text-xs font-bold text-zinc-300 tracking-widest uppercase border border-black/5">{t}</span>
                                                 ))}
                                             </div>
-                                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tighter font-display uppercase text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">{project.title}</h3>
-                                            <p className="text-zinc-300 text-base md:text-lg max-w-2xl drop-shadow-md line-clamp-2 md:line-clamp-none">{project.description}</p>
+                                            <h3 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-2 sm:mb-4 tracking-tighter font-display uppercase text-zinc-100 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">{project.title}</h3>
+                                            <p className="text-zinc-300 text-xs sm:text-base md:text-lg max-w-2xl drop-shadow-md line-clamp-2 md:line-clamp-none">{project.description}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1011,7 +1087,7 @@ const PremiumPortfolio = () => {
                             href="https://github.com/kirank860"
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 border border-white/5 hover:border-white/10 rounded-full text-zinc-400 hover:text-white transition-all hover:bg-zinc-800 shadow-xl"
+                            className="inline-flex items-center gap-2 px-8 py-4 glass hover:border-black/10 rounded-full text-zinc-400 hover:text-zinc-100 transition-all hover:bg-white/40 shadow-xl"
                         >
                             View More on GitHub
                             <ExternalLink size={16} />
@@ -1024,7 +1100,7 @@ const PremiumPortfolio = () => {
                 <section id="contact" className="section-padding relative overflow-hidden">
                     {/* Giant Background Text */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none -z-0">
-                        <span className="text-[15vw] font-black italic tracking-tighter font-display text-white/[0.02] whitespace-nowrap">
+                        <span className="text-[15vw] font-black italic tracking-tighter font-display text-zinc-100/[0.02] whitespace-nowrap">
                             LET'S TALK
                         </span>
                     </div>
@@ -1038,47 +1114,47 @@ const PremiumPortfolio = () => {
                             transition={{ duration: 0.8 }}
                             className="text-center mb-20"
                         >
-                            <h2 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black italic tracking-tighter font-display leading-[0.9]">
+                            <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black italic tracking-tighter font-display leading-[0.9]">
                                 <span className="text-stroke block">LET'S WORK</span>
                                 <span className="text-gradient-vibrant block">TOGETHER</span>
                             </h2>
                         </motion.div>
 
                         {/* Contact Content */}
-                        <div className="bg-zinc-900 border border-white/[0.05] rounded-[40px] p-8 md:p-14 lg:p-20 overflow-hidden relative">
+                        <div className="glass rounded-3xl sm:rounded-[40px] p-5 sm:p-8 md:p-14 lg:p-20 overflow-hidden relative">
                             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary-500/5 blur-[100px] -z-10" />
 
                             <div className="grid md:grid-cols-2 gap-12 md:gap-16">
                                 <div>
-                                    <h3 className="text-3xl md:text-4xl font-bold font-display mb-10">
-                                        <span className="text-gradient">Get in touch</span>
+                                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display mb-6 sm:mb-10 text-zinc-800">
+                                        Get in touch
                                     </h3>
                                     <div className="space-y-8">
                                         <a href="mailto:kirankrishnan889@gmail.com" className="flex items-center gap-5 group">
-                                            <div className="p-4 bg-zinc-800 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
-                                                <Mail size={22} className="text-primary-400" />
+                                            <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                                <Mail size={22} className="text-primary-600" />
                                             </div>
                                             <div>
                                                 <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Email</p>
-                                                <span className="text-base md:text-lg font-medium text-white break-all">kirankrishnan889@gmail.com</span>
+                                                <span className="text-base md:text-lg font-bold text-zinc-800 break-all">kirankrishnan889@gmail.com</span>
                                             </div>
                                         </a>
                                         <a href="https://linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="flex items-center gap-5 group">
-                                            <div className="p-4 bg-zinc-800 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
-                                                <Linkedin size={22} className="text-primary-400" />
+                                            <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                                <Linkedin size={22} className="text-primary-600" />
                                             </div>
                                             <div>
                                                 <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Social</p>
-                                                <span className="text-lg font-medium text-white">LinkedIn Profile</span>
+                                                <span className="text-lg font-bold text-zinc-800">LinkedIn Profile</span>
                                             </div>
                                         </a>
                                         <div className="flex items-center gap-5 group">
-                                            <div className="p-4 bg-zinc-800 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
-                                                <Globe size={22} className="text-primary-400" />
+                                            <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                                <Globe size={22} className="text-primary-600" />
                                             </div>
                                             <div>
                                                 <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Location</p>
-                                                <span className="text-lg font-medium text-white">India</span>
+                                                <span className="text-lg font-bold text-zinc-800">India</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1086,26 +1162,26 @@ const PremiumPortfolio = () => {
 
                                 <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 ml-1">Name</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Name</label>
                                         <input
                                             type="text"
-                                            className="w-full bg-zinc-950 border border-white/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-white"
+                                            className="w-full bg-white/50 border border-black/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-zinc-900 placeholder-zinc-500 font-medium"
                                             placeholder="Enter your name"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 ml-1">Email</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Email</label>
                                         <input
                                             type="email"
-                                            className="w-full bg-zinc-950 border border-white/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-white"
+                                            className="w-full bg-white/50 border border-black/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-zinc-900 placeholder-zinc-500 font-medium"
                                             placeholder="Enter your email"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 ml-1">Message</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Message</label>
                                         <textarea
                                             rows={4}
-                                            className="w-full bg-zinc-950 border border-white/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all resize-none text-sm text-white"
+                                            className="w-full bg-white/50 border border-black/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all resize-none text-sm text-zinc-900 placeholder-zinc-500 font-medium"
                                             placeholder="How can I help you?"
                                         />
                                     </div>
@@ -1140,15 +1216,15 @@ const PremiumPortfolio = () => {
                             </div>
                             <span className="font-bold tracking-tighter uppercase font-display text-sm">Kiran K.</span>
                         </div>
-                        <p className="text-zinc-600 text-xs tracking-widest uppercase">© {new Date().getFullYear()} · Built with passion</p>
+                        <p className="text-zinc-300 text-xs tracking-widest uppercase">© {new Date().getFullYear()} · Built with passion</p>
                         <div className="flex gap-5">
-                            <a href="https://github.com/kirank860" target="_blank" rel="noreferrer" className="text-zinc-600 hover:text-primary-400 transition-colors">
+                            <a href="https://github.com/kirank860" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-primary-400 transition-colors">
                                 <Github size={18} />
                             </a>
-                            <a href="https://www.linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="text-zinc-600 hover:text-primary-400 transition-colors">
+                            <a href="https://www.linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-primary-400 transition-colors">
                                 <Linkedin size={18} />
                             </a>
-                            <a href="mailto:kirankrishnan889@gmail.com" className="text-zinc-600 hover:text-primary-400 transition-colors">
+                            <a href="mailto:kirankrishnan889@gmail.com" className="text-zinc-300 hover:text-primary-400 transition-colors">
                                 <Mail size={18} />
                             </a>
                         </div>
