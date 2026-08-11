@@ -325,60 +325,12 @@ const PremiumPortfolio = () => {
         return () => observer.disconnect();
     }, [isLoaded]);
 
-    // Scroll-driven video scrubbing
-    const heroScrollRef = useRef(null);
+    // Video playback (slow loop)
     useEffect(() => {
         const video = heroVideoRef.current;
-        const scrollContainer = heroScrollRef.current;
-        if (!video || !scrollContainer) return;
-
-        // Pause autoplay — scroll controls it now
-        video.pause();
-
-        let currentTime = 0;
-        let targetTime = 0;
-        let rafId = null;
-
-        const lerp = (start, end, factor) => start + (end - start) * factor;
-
-        const updateVideoTime = () => {
-            currentTime = lerp(currentTime, targetTime, 0.08);
-            
-            if (video.duration && isFinite(video.duration)) {
-                video.currentTime = Math.max(0, Math.min(currentTime, video.duration - 0.01));
-            }
-            
-            rafId = requestAnimationFrame(updateVideoTime);
-        };
-
-        const handleScroll = () => {
-            if (!video.duration) return;
-            
-            // Fast calculation without triggering layout thrashing
-            const scrollHeight = window.innerHeight * 2; // Because container is 300vh, minus 100vh viewport
-            const progress = Math.max(0, Math.min(1, window.scrollY / scrollHeight));
-            
-            targetTime = progress * video.duration;
-        };
-
-        // Wait for video metadata to load
-        const startScrubbing = () => {
-            window.addEventListener('scroll', handleScroll, { passive: true });
-            rafId = requestAnimationFrame(updateVideoTime);
-            handleScroll(); // set initial position
-        };
-
-        if (video.readyState >= 1) {
-            startScrubbing();
-        } else {
-            video.addEventListener('loadedmetadata', startScrubbing);
+        if (video) {
+            video.playbackRate = 0.75; // Play slightly slowly
         }
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            if (rafId) cancelAnimationFrame(rafId);
-            video.removeEventListener('loadedmetadata', startScrubbing);
-        };
     }, [isLoaded]);
 
     // Scroll progress
@@ -496,40 +448,7 @@ const PremiumPortfolio = () => {
         }
     ];
 
-    const featuredProjects = [
-        {
-            title: 'Spotify Clone',
-            description: 'A fully functional Spotify clone built with React, Tailwind CSS, and Spotify API.',
-            tech: ['React', 'Tailwind', 'API'],
-            link: 'https://spotify-clone-kiran.vercel.app/',
-            github: 'https://github.com/kirank860/spotify-clone',
-            image: 'https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&q=80&w=800',
-        },
-        {
-            title: 'FoodFlow App',
-            description: 'Enterprise-level food delivery & fleet management system.',
-            tech: ['Node.js', 'MongoDB', 'Socket.io'],
-            link: 'https://food-app-peach.vercel.app/',
-            github: 'https://github.com/kirank860/food-app/',
-            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800',
-        },
-        {
-            title: 'Aranoz Stores',
-            description: 'Sophisticated e-commerce dashboard and storefront for modern retail.',
-            tech: ['React', 'Redux', 'Node.js'],
-            link: 'https://aranoz-stores.vercel.app/',
-            github: 'https://github.com/kirank860/Aranoz-stores',
-            image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800',
-        },
-        {
-            title: '10.10 Project',
-            description: 'A specialized coding challenge project focusing on efficiency and clean architecture.',
-            tech: ['JavaScript', 'CSS', 'Logic'],
-            link: '#',
-            github: 'https://github.com/kirank860/10.10',
-            image: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800',
-        }
-    ];
+    const featuredProjects = [];
 
     const allProjects = [...projects, ...featuredProjects];
 
@@ -651,40 +570,66 @@ const PremiumPortfolio = () => {
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-zinc-950/95 backdrop-blur-2xl md:hidden flex flex-col items-center justify-center p-8"
+                        initial={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
+                        animate={{ opacity: 1, clipPath: 'circle(150% at 100% 0%)' }}
+                        exit={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
+                        transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+                        className="fixed inset-0 z-[100] bg-zinc-950/98 backdrop-blur-3xl md:hidden flex flex-col justify-between p-8 pt-24"
                     >
                         <button
                             onClick={() => setIsMenuOpen(false)}
-                            className="absolute top-8 right-8 p-2 text-zinc-400 hover:text-zinc-100"
+                            className="absolute top-8 right-8 p-3 text-zinc-400 hover:text-white transition-colors bg-white/5 rounded-full"
                         >
-                            <X size={32} />
+                            <X size={24} />
                         </button>
-                        <div className="flex flex-col items-center gap-8">
+                        
+                        <div className="flex flex-col items-start gap-6 mt-8">
                             {sections.map((section, i) => (
-                                <motion.button
+                                <motion.div
                                     key={section}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    onClick={() => {
-                                        document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
-                                        setActiveSection(section);
-                                        setIsMenuOpen(false);
-                                    }}
-                                    className={cn(
-                                        "text-4xl font-black tracking-tighter uppercase font-display transition-colors",
-                                        activeSection === section
-                                            ? "text-primary-400"
-                                            : "text-zinc-100 hover:text-primary-300"
-                                    )}
+                                    initial={{ opacity: 0, x: -30 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.2 + (i * 0.1), duration: 0.5, ease: "easeOut" }}
+                                    className="overflow-hidden"
                                 >
-                                    {section}
-                                </motion.button>
+                                    <button
+                                        onClick={() => {
+                                            document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+                                            setActiveSection(section);
+                                            setIsMenuOpen(false);
+                                        }}
+                                        className={cn(
+                                            "text-5xl font-black tracking-tighter uppercase font-display transition-colors text-left",
+                                            activeSection === section
+                                                ? "text-primary-400"
+                                                : "text-zinc-400 hover:text-white"
+                                        )}
+                                    >
+                                        {section}
+                                    </button>
+                                </motion.div>
                             ))}
                         </div>
+
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6, duration: 0.5 }}
+                            className="mt-auto mb-8 border-t border-white/10 pt-8"
+                        >
+                            <span className="text-primary-400 font-mono tracking-widest uppercase text-xs font-bold mb-4 block">Get in touch</span>
+                            <a href="mailto:hello@example.com" className="text-xl text-white font-medium hover:text-primary-300 transition-colors">
+                                kirank@example.com
+                            </a>
+                            <div className="flex gap-4 mt-6">
+                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
+                                    <Github size={18} />
+                                </a>
+                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
+                                    <Linkedin size={18} />
+                                </a>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -694,9 +639,8 @@ const PremiumPortfolio = () => {
                 ══════════════════════════════════ */}
             <main className="relative z-10">
 
-                {/* ── HERO SECTION (Scroll-Scrub Wrapper) ── */}
-                <div ref={heroScrollRef} className="relative" style={{ height: '300vh', backgroundColor: '#8A8580' }}>
-                <section id="home" ref={heroSectionRef} className="sticky top-0 h-screen flex items-center relative overflow-hidden" style={{ backgroundColor: '#8A8580' }}>
+                {/* ── HERO SECTION ── */}
+                <section id="home" ref={heroSectionRef} className="min-h-screen flex items-center relative overflow-hidden bg-[#8A8580]">
                     
                     {/* Background Ambient Glow & Grid */}
                     <div className="absolute inset-0 z-0">
@@ -708,8 +652,18 @@ const PremiumPortfolio = () => {
                     {/* Gradient transition at bottom to blend hero into rest of the site */}
                     <div className="absolute bottom-0 left-0 w-full h-48 z-20 pointer-events-none" style={{ background: 'linear-gradient(to top, #9C9691, transparent)' }} />
 
-                    {/* HERO CENTER VIDEO */}
-                    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none overflow-hidden">
+                    {/* MOBILE CSS HERO BACKGROUND */}
+                    <div className="absolute inset-0 z-0 flex md:hidden items-center justify-center overflow-hidden bg-[#8A8580]">
+                        <img 
+                            src="/portfolioher.png" 
+                            alt="Hero 3D Object" 
+                            className="absolute z-10 w-full h-full object-cover scale-[1.1]"
+                        />
+                        <div className="absolute inset-0 z-20 pointer-events-none" style={{ background: 'linear-gradient(to top, #9C9691, transparent)' }} />
+                    </div>
+
+                    {/* DESKTOP HERO CENTER VIDEO */}
+                    <div className="absolute inset-0 z-10 hidden md:flex items-center justify-center pointer-events-none overflow-hidden">
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -720,6 +674,8 @@ const PremiumPortfolio = () => {
                                 ref={heroVideoRef}
                                 src="/3d.mp4" 
                                 muted 
+                                autoPlay
+                                loop
                                 playsInline
                                 preload="auto"
                                 className="w-full h-full object-contain scale-[2] sm:scale-150 md:scale-125 lg:scale-110"
@@ -751,7 +707,7 @@ const PremiumPortfolio = () => {
                                 >
                                     <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                                         <div className="w-6 sm:w-12 h-[2px] bg-primary-500 flex-shrink-0" />
-                                        <span className="text-primary-400 font-mono tracking-wider sm:tracking-widest uppercase text-[9px] sm:text-sm font-bold">Kiran K · Full-Stack Developer</span>
+                                        <span className="text-primary-300 font-mono tracking-wider sm:tracking-widest uppercase text-[11px] sm:text-sm font-black drop-shadow-md">Kiran K · Full-Stack Developer</span>
                                     </div>
                                     <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter leading-[1.05] font-display mb-6 sm:mb-10 drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] z-30 relative">
                                         <SplitText text="Building the" className="text-zinc-100 block drop-shadow-xl" delay={0.3} />
@@ -792,7 +748,6 @@ const PremiumPortfolio = () => {
                         </div>
                     </div>
                 </section>
-                </div>
 
                 {/* ── MARQUEE BAND ── */}
                 <div className="py-8 border-y border-white/[0.04] overflow-hidden">
@@ -816,7 +771,7 @@ const PremiumPortfolio = () => {
                             <span className="text-primary-400 font-bold tracking-widest uppercase text-xs mb-6 block">About Me</span>
                             <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black italic tracking-tighter font-display mb-8">
                                 <span className="text-gradient">Crafting</span>{' '}
-                                <span className="text-stroke">digital</span><br />
+                                <span className="text-white drop-shadow-md">digital</span><br />
                                 <span className="text-gradient-vibrant">excellence.</span>
                             </h2>
                         </motion.div>
