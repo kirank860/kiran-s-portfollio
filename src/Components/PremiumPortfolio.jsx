@@ -618,14 +618,14 @@ const PremiumPortfolio = () => {
                             className="mt-auto mb-8 border-t border-white/10 pt-8"
                         >
                             <span className="text-primary-400 font-mono tracking-widest uppercase text-xs font-bold mb-4 block">Get in touch</span>
-                            <a href="mailto:hello@example.com" className="text-xl text-white font-medium hover:text-primary-300 transition-colors">
-                                kirank@example.com
+                            <a href="mailto:kirankrishnan889@gmail.com" className="text-xl text-white font-medium hover:text-primary-300 transition-colors">
+                                kirankrishnan889@gmail.com
                             </a>
                             <div className="flex gap-4 mt-6">
-                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
+                                <a href="https://github.com/kirank860" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
                                     <Github size={18} />
                                 </a>
-                                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
+                                <a href="https://www.linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary-500 transition-colors">
                                     <Linkedin size={18} />
                                 </a>
                             </div>
