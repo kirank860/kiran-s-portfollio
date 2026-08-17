@@ -503,15 +503,15 @@ const PremiumPortfolio = () => {
 
             {/* ── AMBIENT ORBS ── */}
             <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-900/8 blur-[150px] rounded-full z-0 animate-float pointer-events-none" />
-            <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-900/8 blur-[150px] rounded-full z-0 animate-float-delayed pointer-events-none" />
-            <div className="fixed top-[40%] left-[50%] w-[30%] h-[30%] bg-pink-900/5 blur-[120px] rounded-full z-0 animate-pulse-slow pointer-events-none" />
+            <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-sky-900/8 blur-[150px] rounded-full z-0 animate-float-delayed pointer-events-none" />
+            <div className="fixed top-[40%] left-[50%] w-[30%] h-[30%] bg-cyan-900/5 blur-[120px] rounded-full z-0 animate-pulse-slow pointer-events-none" />
 
             {/* ── SCROLL PROGRESS BAR ── */}
             <motion.div
                 className="fixed top-0 left-0 right-0 h-[2px] z-[100] origin-left"
                 style={{
                     scaleX,
-                    background: 'linear-gradient(90deg, #7c3aed, #a78bfa, #c084fc, #e879f9)',
+                    background: 'linear-gradient(90deg, #1d4ed8, #3b82f6, #60a5fa, #7dd3fc)',
                 }}
             />
 
@@ -550,7 +550,7 @@ const PremiumPortfolio = () => {
                                         layoutId="navIndicator"
                                         className="absolute inset-0 bg-primary-600/80 rounded-full -z-10"
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                        style={{ boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
+                                        style={{ boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)' }}
                                     />
                                 )}
                                 {section}
@@ -687,7 +687,7 @@ const PremiumPortfolio = () => {
                     <div 
                         className="absolute inset-0 z-[15] pointer-events-none"
                         style={{ 
-                            background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(139, 92, 246, 0.15) 30%, rgba(167, 139, 250, 0.1) 50%, transparent 70%)'
+                            background: 'linear-gradient(135deg, rgba(29, 78, 216, 0.25) 0%, rgba(59, 130, 246, 0.15) 30%, rgba(96, 165, 250, 0.1) 50%, transparent 70%)'
                         }} 
                     />
 
@@ -843,7 +843,7 @@ const PremiumPortfolio = () => {
                                 className="md:col-span-1 p-8 glass rounded-3xl flex flex-col items-center justify-center text-center gap-4 group cursor-pointer no-underline relative overflow-hidden"
                                 onMouseMove={handleCardMouseMove}
                             >
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary-600/10 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary-600/10 to-sky-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 <div className="relative z-10">
                                     <Download size={48} className="text-primary-500 transition-transform group-hover:-translate-y-2 duration-500 mx-auto" />
                                     <h3 className="font-bold text-xl uppercase tracking-widest font-display mt-4">Resume</h3>
@@ -1166,7 +1166,7 @@ const PremiumPortfolio = () => {
                     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black italic font-display text-sm"
-                                style={{ background: 'linear-gradient(135deg, #7c3aed, #a78bfa)' }}>
+                                style={{ background: 'linear-gradient(135deg, #1d4ed8, #93c5fd)' }}>
                                 K
                             </div>
                             <span className="font-bold tracking-tighter uppercase font-display text-sm">Kiran K.</span>

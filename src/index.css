@@ -7,8 +7,8 @@
 :root {
   --background: #09090b;
   --foreground: #fafafa;
-  --accent: #8b5cf6;
-  --accent-glow: rgba(139, 92, 246, 0.4);
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.4);
   --cursor-size: 12px;
   --cursor-outline-size: 50px;
 }
@@ -55,7 +55,7 @@ body {
   letter-spacing: -0.05em;
   font-style: italic;
   text-transform: uppercase;
-  background: linear-gradient(135deg, #fff, var(--accent), #c084fc);
+  background: linear-gradient(135deg, #fff, var(--accent), #60a5fa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -71,7 +71,7 @@ body {
 
 .preloader-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #c084fc);
+  background: linear-gradient(90deg, var(--accent), #60a5fa);
   border-radius: 2px;
   animation: preloader-fill 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -217,7 +217,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 50%;
   top: 0;
   width: 1px;
-  background: linear-gradient(to bottom, var(--accent), #c084fc);
+  background: linear-gradient(to bottom, var(--accent), #60a5fa);
   transform: translateX(-50%);
   transition: height 0.1s linear;
 }
@@ -317,11 +317,11 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .text-gradient-vibrant {
-    @apply bg-gradient-to-r from-primary-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-400 via-sky-400 to-cyan-400 bg-clip-text text-transparent;
   }
 
   .text-gradient-accent {
-    background: linear-gradient(135deg, #7c3aed, #8b5cf6, #c084fc);
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6, #60a5fa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -339,12 +339,12 @@ h1, h2, h3, h4, h5, h6 {
 
   .btn-primary {
     @apply relative overflow-hidden px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 active:scale-95;
-    background: linear-gradient(135deg, #7c3aed, #8b5cf6, #a78bfa);
-    box-shadow: 0 0 0px rgba(139, 92, 246, 0);
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6, #93c5fd);
+    box-shadow: 0 0 0px rgba(59, 130, 246, 0);
   }
 
   .btn-primary:hover {
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4), 0 0 60px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.15);
     transform: translateY(-2px);
   }
 
@@ -355,8 +355,8 @@ h1, h2, h3, h4, h5, h6 {
 
   .btn-outline:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
-    background: rgba(139, 92, 246, 0.05);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    background: rgba(59, 130, 246, 0.05);
   }
 
   .section-padding {
@@ -397,7 +397,7 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   inset: 0;
   background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
-      rgba(139, 92, 246, 0.06),
+      rgba(59, 130, 246, 0.06),
       transparent 40%);
   z-index: 1;
   pointer-events: none;
@@ -536,7 +536,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent), #c084fc);
+  background: linear-gradient(90deg, var(--accent), #60a5fa);
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -548,6 +548,6 @@ h1, h2, h3, h4, h5, h6 {
    SELECTION
    ═══════════════════════════════════ */
 ::selection {
-  background: rgba(139, 92, 246, 0.3);
+  background: rgba(59, 130, 246, 0.3);
   color: white;
 }
