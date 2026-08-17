@@ -1079,74 +1079,39 @@ const PremiumPortfolio = () => {
                         <div className="glass rounded-3xl sm:rounded-[40px] p-5 sm:p-8 md:p-14 lg:p-20 overflow-hidden relative">
                             <div className="absolute top-0 right-0 w-1/2 h-full bg-primary-500/5 blur-[100px] -z-10" />
 
-                            <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-                                <div>
-                                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display mb-6 sm:mb-10 text-zinc-800">
-                                        Get in touch
-                                    </h3>
-                                    <div className="space-y-8">
-                                        <a href="mailto:kirankrishnan889@gmail.com" className="flex items-center gap-5 group">
-                                            <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
-                                                <Mail size={22} className="text-primary-600" />
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Email</p>
-                                                <span className="text-base md:text-lg font-bold text-zinc-800 break-all">kirankrishnan889@gmail.com</span>
-                                            </div>
-                                        </a>
-                                        <a href="https://linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="flex items-center gap-5 group">
-                                            <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
-                                                <Linkedin size={22} className="text-primary-600" />
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Social</p>
-                                                <span className="text-lg font-bold text-zinc-800">LinkedIn Profile</span>
-                                            </div>
-                                        </a>
-                                        <div className="flex items-center gap-5 group">
-                                            <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
-                                                <Globe size={22} className="text-primary-600" />
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Location</p>
-                                                <span className="text-lg font-bold text-zinc-800">India</span>
-                                            </div>
+                            <div className="max-w-md mx-auto">
+                                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display mb-6 sm:mb-10 text-zinc-800 text-center">
+                                    Get in touch
+                                </h3>
+                                <div className="space-y-8">
+                                    <a href="mailto:kirankrishnan889@gmail.com" className="flex items-center gap-5 group">
+                                        <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                            <Mail size={22} className="text-primary-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Email</p>
+                                            <span className="text-base md:text-lg font-bold text-zinc-800 break-all">kirankrishnan889@gmail.com</span>
+                                        </div>
+                                    </a>
+                                    <a href="https://linkedin.com/in/kiran-k-b25b2b262/" target="_blank" rel="noreferrer" className="flex items-center gap-5 group">
+                                        <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                            <Linkedin size={22} className="text-primary-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Social</p>
+                                            <span className="text-lg font-bold text-zinc-800">LinkedIn Profile</span>
+                                        </div>
+                                    </a>
+                                    <div className="flex items-center gap-5 group">
+                                        <div className="p-4 bg-white/60 rounded-2xl group-hover:bg-primary-500/20 transition-all duration-300">
+                                            <Globe size={22} className="text-primary-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold mb-1">Location</p>
+                                            <span className="text-lg font-bold text-zinc-800">India</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Name</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-white/50 border border-black/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-zinc-900 placeholder-zinc-500 font-medium"
-                                            placeholder="Enter your name"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Email</label>
-                                        <input
-                                            type="email"
-                                            className="w-full bg-white/50 border border-black/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all text-sm text-zinc-900 placeholder-zinc-500 font-medium"
-                                            placeholder="Enter your email"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 ml-1">Message</label>
-                                        <textarea
-                                            rows={4}
-                                            className="w-full bg-white/50 border border-black/[0.1] p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all resize-none text-sm text-zinc-900 placeholder-zinc-500 font-medium"
-                                            placeholder="How can I help you?"
-                                        />
-                                    </div>
-                                    <Magnetic>
-                                        <button type="submit" className="w-full btn-primary py-4 text-base font-bold">
-                                            Send Message
-                                            <ArrowRight size={18} className="inline-block ml-2" />
-                                        </button>
-                                    </Magnetic>
-                                </form>
                             </div>
                         </div>
                     </div>
